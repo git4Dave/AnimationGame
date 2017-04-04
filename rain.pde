@@ -1,3 +1,13 @@
+/*
+
+
+this was shin's original code for rain.
+I am going to make adjustments so that it fits well on the rest of the design.
+
+
+
+*/
+
 
 //final String STRING = "！＠＃＄％＾＆＊（）＿＋｝｛」「”；’；？・？？？？？？！*-/ABCDEFDHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789＋－！＄＠％＾＆＆＾＊＆＠＆あいうえおかきくけこさしすせそ破魔矢らは高校アイウエオリピバハマヤラバヤユヨコウサシスセソカキクケコナニヌネノキイ";
 //final String STRING = "ABCDEFDHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789?!@#$%&*+???????!!!!";
