@@ -93,12 +93,8 @@ void insruction(){
   String quit = "Hit 'q' to quit ";
   text(howToPlay,height/2-300,height/2-250);
   text(quit,height/2-300,height/2-450);
-  
-  if(key == 'q'){
-    choice = 0;
-  }
-  
 }
+
 void checkKey(){
   
   if(key == 'p'){
@@ -109,6 +105,9 @@ void checkKey(){
   }
   if(key == 'c'){
     choice = 3;
+  }
+  if(key == 'q'){
+    choice = 0;
   }
   
 }
