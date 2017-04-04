@@ -1,3 +1,9 @@
+/*
+
+  main function
+
+*/
+
 class Menu {
   private String title = "Defend The Castle";
   private String subTitle = "Press Enter to Start";
