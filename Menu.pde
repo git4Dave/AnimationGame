@@ -42,6 +42,7 @@ void setup(){
 }
 
 Menu menu = new Menu();
+Castle castle = new Castle();
 
 boolean showMenu = true;
 int choice = 0;
@@ -61,14 +62,13 @@ void draw(){
      
      checkKey();
      
-//     if(choice == 0) //only run at the welcome screen
-
+     
      
      switch(choice){
       
        //methods to do games 
        case 1 :{
-
+         castle.display();
          break;
        }
        case 2:{
