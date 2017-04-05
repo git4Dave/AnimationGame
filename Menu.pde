@@ -50,6 +50,7 @@ Castle castle = new Castle();
 Cannon cannon = new Cannon();
 Environment enviro = new Environment();
 MatrixRain matrix[][] = new MatrixRain[col][row];
+Lightning lightning = new Lightning();
 
 void setup() {
   size(1500, 1500);
@@ -87,11 +88,15 @@ void draw() {
       //methods to do games 
     case 1 :
       {
-        background(255);
+        background(0);
         cannon.display();
         castle.display();
         enviro.display();
-        rain(5,35);
+        lightning.drawLightning(0,1000,100,0,1000,100,0,1000,100);
+        lightning.drawLightning(0,1000,400,0,1000,400,0,1000,400);
+        lightning.drawLightning(0,1000,700,0,1000,700,0,1000,700);
+        lightning.drawLightning(0,1000,1000,0,1000,1000,0,1000,1000);
+      //  rain(5,35);
         break;
       }
     case 2:
