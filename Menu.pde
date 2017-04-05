@@ -43,6 +43,10 @@ class Menu {
   }
 }
 
+/***************************************/
+/*           class declaration         */
+
+
 int col = 150; ///the amount of rain dropping 
 int row = 35;   ///length of the rain
 Menu menu = new Menu();
@@ -51,6 +55,8 @@ Cannon cannon = new Cannon();
 Environment enviro = new Environment();
 MatrixRain matrix[][] = new MatrixRain[col][row];
 Lightning lightning = new Lightning();
+
+/***************************************/
 
 void setup() {
   size(1500, 1500);
