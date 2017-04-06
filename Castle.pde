@@ -1,8 +1,9 @@
 class Castle{
  
+  private int castleHealth;
+  
   public Castle(){
-    
-    
+    castleHealth = 500;  
   }
   
   public void display(){
