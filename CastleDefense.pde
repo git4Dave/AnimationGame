@@ -1,3 +1,11 @@
+/*
+
+     ***  main  *** 
+
+
+
+*/
+
 PImage pm;
 String title, subTitle, welcome;
 String a, b, c;   
@@ -5,7 +13,7 @@ int green;
 boolean showMenu;
 int choice;
 boolean menuAccess;
-
+int heights = 1000;
 void setup(){
   size(1000, 600);
   pm = loadImage("sky.jpg");
@@ -22,6 +30,12 @@ void setup(){
   menuAccess = true;
 }
 
+
+
+///class 
+life _life = new life(150);///life of the castle
+Item item = new Item();
+Environment en = new Environment();
 
 void draw(){
     displayMenu();
@@ -82,14 +96,17 @@ void draw(){
          image(pm, 0, 0, width, height);
           Castle cas = new Castle();
           Cannon can = new Cannon();
-          Environment en = new Environment();
-          
+
           smooth();
           
           can.moveCannonAngle();
           can.display();
           cas.display();
           en.display();
+          
+          get_items();
+          use_item();
+          
          break;
        }
        case 2:{
@@ -107,6 +124,30 @@ void draw(){
 
   
 }//end of draw
+
+
+void get_items(){
+ 
+    item.get_Lightning();
+    item.get_Life();
+    item.showLighningCount();
+    _life.showLife(); 
+}
+
+void use_item(){
+  
+  if(key == 'l' && item.getLightningCount() > 0){
+          en.Lightning(0,1000,100,0,1000,100,0,1000,100);
+          en.Lightning(0,1000,400,0,1000,400,0,1000,400);
+          en.Lightning(0,1000,700,0,1000,700,0,1000,700);
+          en.Lightning(0,1000,1000,0,1000,1000,0,1000,1000);
+          item.decrementLightningCount();
+          key = ';';///set the key to diffrent key
+  }else{
+    key = ';';///set the key to diffrent key
+  }
+  
+}
 
 void insruction(){
   background(0);
