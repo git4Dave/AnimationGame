@@ -6,6 +6,7 @@
 
 */
 
+import processing.serial.*;
 PImage pm;
 String title, subTitle, welcome;
 String a, b, c;   
@@ -14,6 +15,8 @@ boolean showMenu;
 int choice;
 boolean menuAccess;
 int heights = 1000;
+final int DISPLAY_DURATION = 200; // 1s
+
 void setup(){
   size(1000, 600);
   pm = loadImage("sky.jpg");
@@ -28,6 +31,7 @@ void setup(){
   choice = 0;
   smooth();
   menuAccess = true;
+  //printArray(Serial.list());
 }
 
 
@@ -72,7 +76,7 @@ void draw(){
     textSize(15);
   }
   
-  public void displayMenu(){
+public void displayMenu(){
    if(key == ENTER)
     showMenu = false;
   
@@ -102,11 +106,10 @@ void draw(){
           can.moveCannonAngle();
           can.display();
           cas.display();
-          en.display();
           
           get_items();
           use_item();
-          
+          en.display();
          break;
        }
        case 2:{
@@ -130,19 +133,26 @@ void get_items(){
  
     item.get_Lightning();
     item.get_Life();
+    item.get_Troop();
     item.showLighningCount();
+    item.showTroopCount();
     _life.showLife(); 
 }
 
 void use_item(){
   
   if(key == 'l' && item.getLightningCount() > 0){
-          en.Lightning(0,1000,100,0,1000,100,0,1000,100);
-          en.Lightning(0,1000,400,0,1000,400,0,1000,400);
-          en.Lightning(0,1000,700,0,1000,700,0,1000,700);
-          en.Lightning(0,1000,1000,0,1000,1000,0,1000,1000);
-          item.decrementLightningCount();
-          key = ';';///set the key to diffrent key
+    
+       int startTime = millis();
+    //   while (millis() - startTime < DISPLAY_DURATION){
+         key = ';';///set the key to diffrent key
+         en.Lightning(0,1000,100,0,1000,100,0,1000,100);
+         en.Lightning(0,1000,400,0,1000,400,0,1000,400);
+         en.Lightning(0,1000,700,0,1000,700,0,1000,700);
+         en.Lightning(0,1000,1000,0,1000,1000,0,1000,1000);
+         
+    //   }
+        item.decrementLightningCount();
   }else{
     key = ';';///set the key to diffrent key
   }
