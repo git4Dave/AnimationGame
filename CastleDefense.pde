@@ -15,7 +15,17 @@ boolean showMenu;
 int choice;
 boolean menuAccess;
 int heights = 1000;
+final int enemySize = 30;
 final int DISPLAY_DURATION = 200; // 1s
+
+
+///class 
+life _life = new life(150);///life of the castle
+Item item = new Item();
+Environment en = new Environment();
+EnemyTroop enemytoop[] = new EnemyTroop[enemySize];
+Cannon cannon = new Cannon();
+User p1 = new User();///player class
 
 void setup(){
   size(1000, 600);
@@ -31,15 +41,13 @@ void setup(){
   choice = 0;
   smooth();
   menuAccess = true;
+  for(int i = 0;i<enemySize;i++){
+      enemytoop[i] = new EnemyTroop();
+      enemytoop[i].init();
+  }
+  cursor(CROSS);
   //printArray(Serial.list());
 }
-
-
-
-///class 
-life _life = new life(150);///life of the castle
-Item item = new Item();
-Environment en = new Environment();
 
 void draw(){
     displayMenu();
@@ -47,7 +55,7 @@ void draw(){
 }
 
 
- void showTitle(){
+void showTitle(){
     //PFont m;
    // m = loadFont("Symbola-48.vlw");
     pushMatrix();
@@ -61,7 +69,7 @@ void draw(){
     textSize(15);
     strokeWeight(8);
     popMatrix();
-  }//end of showtitle
+}//end of showtitle
   
    void mainMenu(){
     background(0);
@@ -104,12 +112,19 @@ public void displayMenu(){
           smooth();
           
           can.moveCannonAngle();
+          p1.display();
           can.display();
           cas.display();
           
           get_items();
           use_item();
           en.display();
+          
+          cannon.showBall();
+          
+          ///this will be changed.
+          ///this will be repalced as cannnon location
+          checkAttacks();
          break;
        }
        case 2:{
@@ -130,7 +145,6 @@ public void displayMenu(){
 
 
 void get_items(){
- 
     item.get_Lightning();
     item.get_Life();
     item.get_Troop();
@@ -153,10 +167,14 @@ void use_item(){
          
     //   }
         item.decrementLightningCount();
-  }else{
+  }
+  else if(key == 'q'){
+    
+    choice = 0;
+  }
+  else{
     key = ';';///set the key to diffrent key
   }
-  
 }
 
 void insruction(){
@@ -170,8 +188,8 @@ void insruction(){
   if(key == 'q'){
     choice = 0;
   }
-  
 }
+
 void checkKey(){
   
   if(key == 'p'){
@@ -183,5 +201,36 @@ void checkKey(){
   if(key == 'c'){
     choice = 3;
   }
+  
+}
+
+
+void mousePressed(){
+ p1.fire(); 
+}
+
+
+
+void checkAttacks(){
+  
+
+  println(p1.getSizeOfCannonBallArrayList());
+  for(int j = 0;j<p1.getSizeOfCannonBallArrayList();j++){
+      float ax = p1.getXCoordOfCannonBallInArrayListAtIndex(j);
+      float ay = p1.getYCoordOfCannonBallInArrayListAtIndex(j);
+      println(ax+" "+ay);
+    for(int i = 0;i<enemySize;i++){
+          enemytoop[i].checkAttackers((int)ax,(int)ay);
+     }
+  } 
+  
+  for(int i = 0;i<enemySize;i++){
+     if(enemytoop[i].getIsAlive()){
+        enemytoop[i].showEnery();
+        //  println(i+" is alive");
+       }
+   }
+  
+  
   
 }
