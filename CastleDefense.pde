@@ -115,16 +115,11 @@ public void displayMenu(){
           p1.display();
           can.display();
           cas.display();
-          
           get_items();
           use_item();
           en.display();
+          checkAttacksForEnemy();
           
-          cannon.showBall();
-          
-          ///this will be changed.
-          ///this will be repalced as cannnon location
-          checkAttacks();
          break;
        }
        case 2:{
@@ -211,7 +206,7 @@ void mousePressed(){
 
 
 
-void checkAttacks(){
+void checkAttacksForEnemy(){
   
 
   println(p1.getSizeOfCannonBallArrayList());
@@ -229,8 +224,10 @@ void checkAttacks(){
         enemytoop[i].showEnery();
         //  println(i+" is alive");
        }
+       
+     enemytoop[i].enemyMoveUP();
    }
   
-  
+
   
 }
