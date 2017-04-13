@@ -34,6 +34,15 @@ public boolean shouldDestroy(){
     
     return false;
 }
+
+public float getXcoordForCannonBall(){
+  return xCoordForCannonBall;
+}
+
+public float getYcoordForCannonBall(){
+  return yCoordForCannonBall;
+}
+
   public void display() {
     fill(0);
     noStroke();
