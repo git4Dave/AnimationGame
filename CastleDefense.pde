@@ -35,7 +35,8 @@ void setup(){
   menuAccess = true;
    for(int i = 0;i<enemySize;i++){
       enemytroop[i] = new EnemyTroop();
-      enemytroop[i].init();
+      enemytroop[i].setUpInitialPositionForEnemy();
+      enemytroop[i].setJumpValueForEnemy();
   }
   cursor(CROSS);
 }
@@ -215,11 +216,9 @@ void checkAttacks(){
   for(int i = 0;i<enemySize;i++){
      if(enemytroop[i].getIsAlive()){
         enemytroop[i].showEnery();
-        //  println(i+" is alive");
-       }
+     }
        enemytroop[i].enemyMoveUP();
-   }
-  
+  }
   
   
 }
