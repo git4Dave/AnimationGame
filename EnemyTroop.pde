@@ -8,6 +8,9 @@ class EnemyTroop{
   private int x ;
   private int y = 500;
   private boolean Moveforward = true;
+  private boolean enemyMoveGoUp = false;
+  final private int ceiling = 350; 
+  final private int ground = 500; 
   EnemyTroop(){
     this.isAlive = true;
   };
@@ -36,10 +39,39 @@ class EnemyTroop{
       this.Moveforward = false;
   }
   
+  void enemyMoveUP(){
+    if(!enemyMoveGoUp){
+      if(y<ground){
+         y++; 
+      }
+      else{
+        float randNumberForGoUp = random(0,15);
+        if(randNumberForGoUp<0.05)
+          setEnemyMoveUPToTrue();
+      }
+    }
+    else{
+        if(y>=ceiling)
+            y--;
+        else
+          setEnemyMoveUPToFalse();
+    
+    }
+  }//end of enemyMoveUP
+  
+  
+  void setEnemyMoveUPToFalse(){
+    enemyMoveGoUp = false;
+  }
+  
+  void setEnemyMoveUPToTrue(){
+    enemyMoveGoUp = true;
+  }
+  
   void checkAttackers(int ex,int ey){
     
     //if the attacker is close enough, move back from it.
-    if(abs(this.y - ey)< 100 && (ex - this.x)<150 && (ex - this.x)>0)
+    if(abs(this.y - ey)< 100 && (ex - this.x)<100 && (ex - this.x)>0)
           setMovebackward();
           
     ///once the attcker is gone then start moving forward again
