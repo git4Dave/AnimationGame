@@ -1,7 +1,6 @@
 
 class User {
 
-  Cannon cannon = new Cannon();
   ArrayList<CannonBall> cannonballs;   
   PVector position, velocity; // contains x and y...
   double cannonBallSpeed =  4.4;
@@ -28,14 +27,26 @@ class User {
         horizontalSpeed*= cannonBallSpeed;
         verticalSpeed*= cannonBallSpeed;
         
-        cannonballs.add ( new CannonBall( (width-225), (height/2 - 25), horizontalSpeed, verticalSpeed, 10 ));
+        cannonballs.add ( new CannonBall( (width-370), (height/2 - 25), horizontalSpeed, verticalSpeed, 10 ));
       } 
     }
   } 
 
   float getCannonAngle() {
-    float angleOfTheCannon=-atan2(mouseY - (height/2 - 25), mouseX- (width-225));
+    float angleOfTheCannon=-atan2(mouseY - (height/2 - 25), mouseX- (width-370));
     return angleOfTheCannon;
+  }
+  
+  public int getSizeOfCannonBallArrayList(){
+      return cannonballs.size() - 1;
+  }
+  
+  public float getXCoordOfCannonBallInArrayListAtIndex(int i){
+     return cannonballs.get(i).getXcoordForCannonBall();
+  }
+  
+  public float getYCoordOfCannonBallInArrayListAtIndex(int i){
+     return cannonballs.get(i).getYcoordForCannonBall();
   }
 
   void display() {

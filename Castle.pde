@@ -10,6 +10,10 @@ class Castle{
     rectMode(CENTER);
     noStroke();
     
+    pushMatrix();
+    
+    translate(364,0);
+    
     fill(0, 0, 255);
     triangle(877, height - 380, 830, height - 400, 877, height - 425);
     
@@ -37,15 +41,16 @@ class Castle{
     rect(910, height - 275, 15, 15);
     
     fill(#4A4D4A);
-    rect(width - 25, 300, 50, 50);
-    rect(width-46, 275, 8, 10);
-    rect(width-32, 275, 8, 10);
-    rect(width-18, 275, 8, 10);
-    rect(width-4, 275, 8, 10);
+    rect(width - 25 - 500, 300, 50, 50);
+    rect(width-46 - 500, 275, 8, 10);
+    rect(width-32 - 500, 275, 8, 10);
+    rect(width-18 - 500, 275, 8, 10);
+    rect(width-4 - 500, 275, 8, 10);
     
     fill(20);
-    arc(width - 25, 315, 20, 60, PI, 2*PI);
+    arc(width - 25 - 500, 315, 20, 60, PI, 2*PI);
     
+    popMatrix();
   }
   
 }

@@ -6,24 +6,29 @@ class Environment{
  
  public void display(){
     fill(#0C5F07);
-    rect(200, height - 50, 400, 100);
+    rect(265, height - 50, 630, 100);
     
-    fill(100);
+    pushMatrix();
+    
+    translate(330, 0);
+    
+     fill(100);
     triangle(600, height - 45, 615, height - 57, 615, height - 45);
     fill(100);
-    triangle(500, height - 45, 485, height - 57, 485, height - 45);
+    triangle(400, height - 45, 385, height - 57, 385, height - 45);
     fill(0, 0, 255);
-    rect(550, height - 25, 300, 50);
+    rect(500, height - 25, 500, 50);
     
     fill(#62450C);
-    rect(550, height - 92, 300, 15);
+    rect(500, height - 92, 500, 15);
     
     fill(#0C5F07);
     rect(850, height - 50, 400, 100); 
+    popMatrix();
    
  }
- 
-   void Lightning(int start, int end, int x, int start2, int end2, int x2, int start3, int end3, int x3) {
+  
+     void Lightning(int start, int end, int x, int start2, int end2, int x2, int start3, int end3, int x3) {
 
     ///x range 
     float dx = random(-15, 15);
@@ -59,18 +64,18 @@ class Environment{
    void killEnemyLightning(int x,int x2,int x3){
      
      for(int i = 0;i<enemySize;i++){
-         if(abs(enemytoop[i].getX()-x)<10)
-           enemytoop[i].setToDead();
+         if(abs(enemytroop[i].getX()-x)<10)
+           enemytroop[i].setToDead();
      }
      
      for(int i = 0;i<enemySize;i++){
-         if(abs(enemytoop[i].getX()-x2)<10)
-           enemytoop[i].setToDead();
+         if(abs(enemytroop[i].getX()-x2)<10)
+           enemytroop[i].setToDead();
      }
      
      for(int i = 0;i<enemySize;i++){
-         if(abs(enemytoop[i].getX()-x3)<10)
-           enemytoop[i].setToDead();
+         if(abs(enemytroop[i].getX()-x3)<10)
+           enemytroop[i].setToDead();
      }
      
    }

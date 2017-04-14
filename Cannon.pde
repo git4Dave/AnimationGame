@@ -6,7 +6,7 @@ class Cannon{
   private float angle = PI*3/4;
 
   public Cannon(){
-   xCoordForCannon = width-225; 
+   xCoordForCannon = width-370; 
    YCoordForCannon = height/2 - 25;   
 }
 
@@ -19,7 +19,7 @@ class Cannon{
     strokeWeight(1);
     ellipse(xCoordForCannon - 2, YCoordForCannon - 3, 20, 20); 
     
-    strokeWeight(10);
+    strokeWeight(11);
     line(xCoordForCannon, YCoordForCannon, xCoordForCannon+lengthOfCannonBarrel*cos(-angle), YCoordForCannon+lengthOfCannonBarrel*sin(-angle));
     strokeWeight(1); 
     
@@ -31,8 +31,9 @@ class Cannon{
           
   }
   
- void moveCannonAngle(){ 
+ float moveCannonAngle(){ 
   this.angle=-atan2(mouseY-YCoordForCannon,mouseX-xCoordForCannon);
+  return angle;
 }
   
 }

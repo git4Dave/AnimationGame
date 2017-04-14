@@ -1,12 +1,3 @@
-/*
-
-     ***  main  *** 
-
-
-
-*/
-
-import processing.serial.*;
 PImage pm;
 String title, subTitle, welcome;
 String a, b, c;   
@@ -16,19 +7,20 @@ int choice;
 boolean menuAccess;
 int heights = 1000;
 final int enemySize = 30;
-final int DISPLAY_DURATION = 200; // 1s
+final int DISPLAY_DURATION = 200;
 
 
-///class 
 life _life = new life(150);///life of the castle
 Item item = new Item();
-Environment en = new Environment();
-EnemyTroop enemytoop[] = new EnemyTroop[enemySize];
-Cannon cannon = new Cannon();
-User p1 = new User();///player class
+User p1 = new User();
+EnemyTroop enemytroop[] = new EnemyTroop[enemySize];
+Cannon can;
+Castle cas;
+Environment en;
+
 
 void setup(){
-  size(1000, 600);
+  size(1500, 600);
   pm = loadImage("sky.jpg");
   title = "Defend The Castle";
   subTitle = "Press Enter to Start";
@@ -41,21 +33,20 @@ void setup(){
   choice = 0;
   smooth();
   menuAccess = true;
-  for(int i = 0;i<enemySize;i++){
-      enemytoop[i] = new EnemyTroop();
-      enemytoop[i].init();
+   for(int i = 0;i<enemySize;i++){
+      enemytroop[i] = new EnemyTroop();
+      enemytroop[i].init();
   }
   cursor(CROSS);
-  //printArray(Serial.list());
 }
+
 
 void draw(){
     displayMenu();
     menuAccess = false;
 }
 
-
-void showTitle(){
+ void showTitle(){
     //PFont m;
    // m = loadFont("Symbola-48.vlw");
     pushMatrix();
@@ -63,28 +54,32 @@ void showTitle(){
     fill(0,green+50,0);
     //textFont(m); 
     textSize(70);
+    translate(-100, 0);
     text(title,width/2 - 300,height/2);
     textSize(25);
     text(subTitle,width/2 - 100,height/2 + 100);
     textSize(15);
     strokeWeight(8);
     popMatrix();
-}//end of showtitle
+  }//end of showtitle
   
    void mainMenu(){
     background(0);
     fill(0,green+50,0);
     strokeWeight(15);
     textSize(70);
+    pushMatrix();
+    translate(-150, 0);
     text(welcome,width/2-100,height/2-100);
     textSize(40);
     text(a,width/2 - 100,height/2);
     text(b,width/2 - 100,height/2 + 100);
     text(c,width/2 - 100,height/2 + 200);
     textSize(15);
+    popMatrix();
   }
   
-public void displayMenu(){
+  public void displayMenu(){
    if(key == ENTER)
     showMenu = false;
   
@@ -106,20 +101,23 @@ public void displayMenu(){
        //methods to do games 
        case 1 :{
          image(pm, 0, 0, width, height);
-          Castle cas = new Castle();
-          Cannon can = new Cannon();
-
+          cas = new Castle();
+          can = new Cannon();
+          en = new Environment();
+          
           smooth();
           
           can.moveCannonAngle();
           p1.display();
           can.display();
           cas.display();
+          
           get_items();
           use_item();
-          en.display();
-          checkAttacksForEnemy();
           
+          en.display();
+          
+          checkAttacks();
          break;
        }
        case 2:{
@@ -138,6 +136,35 @@ public void displayMenu(){
   
 }//end of draw
 
+void insruction(){
+  background(0);
+  
+  String howToPlay ="instruction goes here...";
+  String quit = "Hit 'q' to quit ";
+  pushMatrix();
+  translate(-150, 0);
+  text(howToPlay,width/2,height/2);
+  text(quit,width/2,height/2 + 250);
+  popMatrix();
+  
+  if(key == 'q'){
+    choice = 0;
+  }
+  
+}
+void checkKey(){
+  
+  if(key == 'p'){
+    choice = 1;
+  }
+  if(key == 'b'){
+     choice = 2; 
+  }
+  if(key == 'c'){
+    choice = 3;
+  }
+ 
+}
 
 void get_items(){
     item.get_Lightning();
@@ -172,62 +199,31 @@ void use_item(){
   }
 }
 
-void insruction(){
-  background(0);
+
+void checkAttacks(){
   
-  String howToPlay ="instruction goes here...";
-  String quit = "Hit 'q' to quit ";
-  text(howToPlay,width/2,height/2);
-  text(quit,width/2,height/2 + 250);
-  
-  if(key == 'q'){
-    choice = 0;
-  }
-}
-
-void checkKey(){
-  
-  if(key == 'p'){
-    choice = 1;
-  }
-  if(key == 'b'){
-     choice = 2; 
-  }
-  if(key == 'c'){
-    choice = 3;
-  }
-  
-}
-
-
-void mousePressed(){
- p1.fire(); 
-}
-
-
-
-void checkAttacksForEnemy(){
-  
-
   println(p1.getSizeOfCannonBallArrayList());
   for(int j = 0;j<p1.getSizeOfCannonBallArrayList();j++){
       float ax = p1.getXCoordOfCannonBallInArrayListAtIndex(j);
       float ay = p1.getYCoordOfCannonBallInArrayListAtIndex(j);
       println(ax+" "+ay);
     for(int i = 0;i<enemySize;i++){
-          enemytoop[i].checkAttackers((int)ax,(int)ay);
+          enemytroop[i].checkAttackers((int)ax,(int)ay);
      }
   } 
   
   for(int i = 0;i<enemySize;i++){
-     if(enemytoop[i].getIsAlive()){
-        enemytoop[i].showEnery();
+     if(enemytroop[i].getIsAlive()){
+        enemytroop[i].showEnery();
         //  println(i+" is alive");
        }
-       
-     enemytoop[i].enemyMoveUP();
+       enemytroop[i].enemyMoveUP();
    }
   
-
   
+  
+}
+
+void mousePressed(){
+  p1.fire();
 }
