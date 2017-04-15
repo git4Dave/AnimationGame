@@ -8,16 +8,19 @@ boolean menuAccess;
 int heights = 1000;
 final int enemySize = 30;
 final int DISPLAY_DURATION = 200;
+private int allianceCount = 0;
 
 
 life _life = new life(150);///life of the castle
 Item item = new Item();
 User p1 = new User();
 EnemyTroop enemytroop[] = new EnemyTroop[enemySize];
+
 Cannon can;
 Castle cas;
 Environment en;
-ArrayList <Detonation> explosions; 
+ArrayList <Detonation> explosions;
+ArrayList <allianceTroop> alliTroop = new ArrayList<allianceTroop>();
 
 
 void setup(){
@@ -44,29 +47,6 @@ void setup(){
 }
 
 
-public void checkAttacks(){
-  boolean wasEnemyHit;
-  println("number of ball on screen "+(p1.getSizeOfCannonBallArrayList()+1));
-  for(int j = 0;j<p1.getSizeOfCannonBallArrayList()+1;j++){
-      float ax = p1.getXCoordOfCannonBallInArrayListAtIndex(j);
-      float ay = p1.getYCoordOfCannonBallInArrayListAtIndex(j);
-      CannonBall can2 = p1.getCannonBallInArrayListAtIndex(j);
-      println(ax+" "+ay);
-    for(int i = 0;i<enemySize;i++){
-          enemytroop[i].checkAttackers((int)ax,(int)ay);
-          wasEnemyHit = enemytroop[i].checkEnemyHitByCannon((int)ax,(int)ay);
-          enemytroop[i].ExecuteCannonBlast(wasEnemyHit, can2);
-     }
-  } 
-  
-  for(int i = 0;i<enemySize;i++){
-     if(enemytroop[i].getIsAlive()){
-        enemytroop[i].showEnery();
-     }
-       enemytroop[i].enemyMoveUP();
-  }
-  
-}
 
 void initiateDetonation() {
   for (Detonation d: explosions) {
@@ -124,12 +104,11 @@ void draw(){
   
   public void displayMenu(){
    if(key == ENTER)
-    showMenu = false;
+     showMenu = false;
   
    if(showMenu){
      background(0);
      showTitle();
-
    }
    else{
      mainMenu();
@@ -143,27 +122,39 @@ void draw(){
       
        //methods to do games 
        case 1 :{
-         image(pm, 0, 0, width, height);
-          cas = new Castle();
-          can = new Cannon();
-          en = new Environment();
-          
-          smooth();
-          
-          can.moveCannonAngle();
-          p1.display();
-          can.display();
-          cas.display();
-          
-          initiateDetonation();
-          get_items();
-          use_item();
-          
-          en.display();
-          
-          checkAttacks();
-         break;
+         
+         if(isAllEnemyDead()){
+            image(pm, 0, 0, width, height);
+            cas = new Castle();
+            can = new Cannon();
+            en = new Environment();           
+            smooth();
+            can.moveCannonAngle();
+            p1.display();
+            can.display();
+            cas.display();
+            initiateDetonation();
+            get_items();
+            use_item();
+            en.display();
+            displayAllianceTroop();
+            checkAttacks();
+         
+       }else{
+            image(pm, 0, 0, width, height);
+            cas = new Castle();
+            can = new Cannon();
+            en = new Environment(); 
+            smooth();
+            can.moveCannonAngle();
+            p1.display();
+            can.display();
+            cas.display();
+            en.display(); 
+            displayYouWin();
        }
+       break;
+     }
        case 2:{
          //score();
          choice = 0;
@@ -179,6 +170,41 @@ void draw(){
 
   
 }//end of draw
+
+
+public void checkAttacks(){
+  
+//  println("number of ball on screen "+(p1.getSizeOfCannonBallArrayList()+1));
+  boolean wasEnemyHit;
+  for(int j = 0;j<p1.getSizeOfCannonBallArrayList()+1;j++){
+      float ax = p1.getXCoordOfCannonBallInArrayListAtIndex(j);
+      float ay = p1.getYCoordOfCannonBallInArrayListAtIndex(j);
+      CannonBall can2 = p1.getCannonBallInArrayListAtIndex(j);
+      println(ax+" "+ay);
+    for(int i = 0;i<enemySize;i++){
+          enemytroop[i].checkAttackers((int)ax,(int)ay);
+          //enemytroop[i].checkEnemyHitByCannon((int)ax,(int)ay);
+          wasEnemyHit = enemytroop[i].checkEnemyHitByCannon((int)ax,(int)ay);
+          enemytroop[i].ExecuteCannonBlast(wasEnemyHit, can2);
+     }
+  } 
+  
+  for(int i = 0;i<enemySize;i++){
+     if(enemytroop[i].getIsAlive()){
+        enemytroop[i].showEnery();
+     }
+       enemytroop[i].enemyMoveUP();
+  }
+  
+}
+
+void displayAllianceTroop(){
+  
+  for(int i = 0;i<alliTroop.size();i++){
+      alliTroop.get(i).showAllianceTroop();
+  }
+  
+}//displayAllianceTroop
 
 void insruction(){
   background(0);
@@ -219,6 +245,23 @@ void get_items(){
     _life.showLife(); 
 }
 
+boolean isAllEnemyDead(){
+  
+  for(int i = 0;i<enemySize;i++)
+    if(enemytroop[i].getIsAlive())
+        return true;
+  
+    return false;
+}//end of isAllEnemyDead
+
+void getAllianceTroop(){
+  while(item.getTroopCount()>0){
+      println("allianceTroop created!");
+      alliTroop.add(new allianceTroop());
+      item.decrementTroopCount();
+  }
+}
+
 void use_item(){
   
   if(key == 'l' && item.getLightningCount() > 0){
@@ -234,13 +277,22 @@ void use_item(){
     //   }
         item.decrementLightningCount();
   }
+  else if (key == 'h'){
+     getAllianceTroop();
+     key = ';';
+  }
   else if(key == 'q'){
-    
     choice = 0;
   }
   else{
     key = ';';///set the key to diffrent key
   }
+}
+
+void displayYouWin(){
+  
+  String youWin = "You Win!";
+  text(youWin,width/2,height/2 + 250);
 }
 
 void mousePressed(){
