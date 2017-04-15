@@ -87,7 +87,7 @@ class EnemyTroop extends enemy_design{
           
     ///once the attcker is gone then start moving forward again
     //(ex - this.x)<0 for once the attacker (cannon ball) is passed
-    if(!Moveforward && ey>500 || (ex - this.x)<0)
+    if(!Moveforward && ey>500 || (ex - this.x)<0 || this.x<-20)
           setMoveForward();
   }
   
