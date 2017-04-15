@@ -6,20 +6,22 @@ class EnemyTroop extends enemy_design{
   private boolean isAlive;
   private float speed;
   private int x ;
-  private int y = 500;
+  private int y = 480;
   private boolean Moveforward = true;
   private boolean enemyMoveGoUp = false;
   final private int ceiling = 250; 
-  final private int ground = 500;
+  final private int ground = 480;
   private float movingDownSpeed;
+  private int enemyLife = 3;
+  private int castleAt = 5;
   
   EnemyTroop(){
     this.isAlive = true;
   };
   
   void setJumpValueForEnemy(){
-     float rand = random(2,6);
-     this.movingDownSpeed = rand; 
+     float rand = random(2,5);
+     this.movingDownSpeed = rand;
   }
   
   void setUpInitialPositionForEnemy(){
@@ -33,8 +35,10 @@ class EnemyTroop extends enemy_design{
     
      enemyInMove(x,y);
     
-    if(Moveforward)
-      x = x+ (int)speed;//moving forward 
+    if(Moveforward){
+       if(x <= 1050)
+           x = x+ (int)speed;//moving forward 
+    }
     else
       x = x- (int)speed;//moving backard
   }
@@ -50,7 +54,7 @@ class EnemyTroop extends enemy_design{
   void enemyMoveUP(){
     if(!enemyMoveGoUp){
       if(y<ground){
-         y++; 
+         y= y+(int)movingDownSpeed;; 
       }
       else{
         float randNumberForGoUp = random(0,15);
@@ -60,13 +64,11 @@ class EnemyTroop extends enemy_design{
     }
     else{
         if(y>=ceiling)
-            y--;
+            y= y-(int)movingDownSpeed;
         else
           setEnemyMoveUPToFalse();
-    
     }
   }//end of enemyMoveUP
-  
   
   void setEnemyMoveUPToFalse(){
     enemyMoveGoUp = false;
@@ -88,6 +90,18 @@ class EnemyTroop extends enemy_design{
           setMoveForward();
   }
   
+  
+  void checkEnemyHitByCannon(int cannonX,int cannonY){
+   
+    if(abs(getX()-cannonX)<10 && abs(getY()-cannonY)<30){
+        if(enemyLife == 0)
+           setToDead();
+        else
+           enemyGetDamaged();
+    }
+    
+  }//end of checkEnemyHitByCannon
+  
   void killEnemy(){
     //kill enemy
     if(abs(mouseX-x)< 5 &&abs(mouseY-Y) < 5 ){
@@ -105,6 +119,14 @@ class EnemyTroop extends enemy_design{
   }
   void setToAlive(){
      this.isAlive = true; 
+  }
+  
+  void setEnemyLife(int newLife){
+    this.enemyLife = newLife;
+  }
+  
+  void enemyGetDamaged(){
+    this.enemyLife--;
   }
   
   void setToDead(){
