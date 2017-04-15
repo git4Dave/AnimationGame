@@ -7,6 +7,7 @@ int choice;
 boolean menuAccess;
 int heights = 1000;
 final int enemySize = 30;
+boolean[] isEnemyTakenByAllanceTroopAsTarget = new boolean[enemySize];
 final int DISPLAY_DURATION = 200;
 private int allianceCount = 0;
 
@@ -36,6 +37,7 @@ void setup(){
   showMenu = true;
   choice = 0;
   smooth();
+  Arrays.fill(isEnemyTakenByAllanceTroopAsTarget,true);
   menuAccess = true;
    for(int i = 0;i<enemySize;i++){
       enemytroop[i] = new EnemyTroop();
@@ -171,7 +173,6 @@ void draw(){
   
 }//end of draw
 
-
 public void checkAttacks(){
   
 //  println("number of ball on screen "+(p1.getSizeOfCannonBallArrayList()+1));
@@ -180,7 +181,7 @@ public void checkAttacks(){
       float ax = p1.getXCoordOfCannonBallInArrayListAtIndex(j);
       float ay = p1.getYCoordOfCannonBallInArrayListAtIndex(j);
       CannonBall can2 = p1.getCannonBallInArrayListAtIndex(j);
-      println(ax+" "+ay);
+      
     for(int i = 0;i<enemySize;i++){
           enemytroop[i].checkAttackers((int)ax,(int)ay);
           //enemytroop[i].checkEnemyHitByCannon((int)ax,(int)ay);
@@ -258,8 +259,30 @@ void getAllianceTroop(){
   while(item.getTroopCount()>0){
       println("allianceTroop created!");
       alliTroop.add(new allianceTroop());
+      int target = getTargetForAllianceTroop();
+      alliTroop.get(alliTroop.size()-1).init(target);
       item.decrementTroopCount();
   }
+}
+
+int getTargetForAllianceTroop(){
+ 
+  for(int i = 0;i<enemySize;i++){
+    if(enemytroop[i].getIsAlive() && isEnemyTakenByAllanceTroopAsTarget[i]){
+      isEnemyTakenByAllanceTroopAsTarget[i] = false;
+      return i;
+    }
+  }
+  
+  ///you get there if all the enemyTroop are currently taken targeted by alliance troop
+  for(int i = 0;i<enemySize;i++){
+    if(enemytroop[i].getIsAlive()){
+      return i;
+    }
+  }
+
+  ///it will never get here
+  return -1;
 }
 
 void use_item(){
