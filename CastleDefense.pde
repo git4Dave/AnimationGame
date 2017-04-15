@@ -37,6 +37,7 @@ void setup(){
   b = "b. Scores";
   c = "c. How to play game";  
   green = 120;
+  Arrays.fill(isEnemyTakenByAllanceTroopAsTarget,true);
   showMenu = true;
   firstGame = false;
   secondGame = false;
@@ -219,7 +220,6 @@ public void checkAttacks(){
       float ax = p1.getXCoordOfCannonBallInArrayListAtIndex(j);
       float ay = p1.getYCoordOfCannonBallInArrayListAtIndex(j);
       CannonBall can2 = p1.getCannonBallInArrayListAtIndex(j);
-      println(ax+" "+ay);
     for(int i = 0;i<enemySize;i++){
           enemytroop[i].checkAttackers((int)ax,(int)ay);
           //enemytroop[i].checkEnemyHitByCannon((int)ax,(int)ay);
@@ -241,6 +241,10 @@ void displayAllianceTroop(){
   
   for(int i = 0;i<alliTroop.size();i++){
       alliTroop.get(i).showAllianceTroop();
+      
+      if(alliTroop.get(i).getLife() == 0){
+        alliTroop.remove(i);
+      }
   }
   
 }//displayAllianceTroop
@@ -302,8 +306,9 @@ boolean isAllEnemyDead(){
 
 void getAllianceTroop(){
   while(item.getTroopCount()>0){
-      println("allianceTroop created!");
       alliTroop.add(new allianceTroop());
+      int a = getTargetForAllianceTroop();
+      alliTroop.get(alliTroop.size()-1).init(a);
       item.decrementTroopCount();
   }
 }
@@ -312,6 +317,7 @@ int getTargetForAllianceTroop(){
  
   for(int i = 0;i<enemySize;i++){
     if(enemytroop[i].getIsAlive() && isEnemyTakenByAllanceTroopAsTarget[i]){
+      println("taget is "+ i);
       isEnemyTakenByAllanceTroopAsTarget[i] = false;
       return i;
     }
