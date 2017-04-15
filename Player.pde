@@ -12,7 +12,7 @@ class User {
     cannonballs  = new ArrayList(); 
   }
 
-  void fire() { 
+  void shootCannon() { 
   float horizontalSpeed;
     float verticalSpeed; 
     if (shootingAmount <= millis()-lastFired) {
@@ -60,7 +60,7 @@ class User {
     //Removes the cannonBalls if they exit map to reduce memory usage
     for (int i = cannonballs.size()-1; i >= 0; i--) { 
      CannonBall currentCannonball = cannonballs.get(i);
-      if (currentCannonball.shouldDestroy()) {
+      if (currentCannonball.shouldDestroy() || currentCannonball.endBall()) {
         cannonballs.remove(i);
       }
     }

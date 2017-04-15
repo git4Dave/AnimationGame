@@ -17,6 +17,7 @@ EnemyTroop enemytroop[] = new EnemyTroop[enemySize];
 Cannon can;
 Castle cas;
 Environment en;
+ArrayList <Detonation> explosions; 
 
 
 void setup(){
@@ -39,7 +40,46 @@ void setup(){
       enemytroop[i].setJumpValueForEnemy();
   }
   cursor(CROSS);
+  explosions = new ArrayList<Detonation>();
 }
+
+
+public void checkAttacks(){
+  
+  println("number of ball on screen "+(p1.getSizeOfCannonBallArrayList()+1));
+  for(int j = 0;j<p1.getSizeOfCannonBallArrayList()+1;j++){
+      float ax = p1.getXCoordOfCannonBallInArrayListAtIndex(j);
+      float ay = p1.getYCoordOfCannonBallInArrayListAtIndex(j);
+      println(ax+" "+ay);
+    for(int i = 0;i<enemySize;i++){
+          enemytroop[i].checkAttackers((int)ax,(int)ay);
+          enemytroop[i].checkEnemyHitByCannon((int)ax,(int)ay);
+     }
+  } 
+  
+  for(int i = 0;i<enemySize;i++){
+     if(enemytroop[i].getIsAlive()){
+        enemytroop[i].showEnery();
+     }
+       enemytroop[i].enemyMoveUP();
+  }
+  
+}
+
+void initiateDetonation() {
+  for (Detonation d: explosions) {
+    d.removeExplosionIfBallLeavesMap(); 
+    d.explosionMaterialMovement();      
+    d.display();     
+  }
+  
+  for (int i = explosions.size()-1; i>=0; i--) {
+    Detonation d = (Detonation) explosions.get(i);
+    if (d.removeExplosion) {
+      explosions.remove(i);
+    }
+  }
+} 
 
 
 void draw(){
@@ -113,6 +153,7 @@ void draw(){
           can.display();
           cas.display();
           
+          initiateDetonation();
           get_items();
           use_item();
           
@@ -200,29 +241,6 @@ void use_item(){
   }
 }
 
-
-void checkAttacks(){
-  
-  println("number of ball on screen "+(p1.getSizeOfCannonBallArrayList()+1));
-  for(int j = 0;j<p1.getSizeOfCannonBallArrayList()+1;j++){
-      float ax = p1.getXCoordOfCannonBallInArrayListAtIndex(j);
-      float ay = p1.getYCoordOfCannonBallInArrayListAtIndex(j);
-      println(ax+" "+ay);
-    for(int i = 0;i<enemySize;i++){
-          enemytroop[i].checkAttackers((int)ax,(int)ay);
-          enemytroop[i].checkEnemyHitByCannon((int)ax,(int)ay);
-     }
-  } 
-  
-  for(int i = 0;i<enemySize;i++){
-     if(enemytroop[i].getIsAlive()){
-        enemytroop[i].showEnery();
-     }
-       enemytroop[i].enemyMoveUP();
-  }
-  
-}
-
 void mousePressed(){
-  p1.fire();
+  p1.shootCannon();
 }
