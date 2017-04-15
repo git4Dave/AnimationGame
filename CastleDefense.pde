@@ -331,7 +331,7 @@ int getTargetForAllianceTroop(){
   }
 
   ///it will never get here
-  return -1;
+  return 0;
 }
 
 void use_item(){
