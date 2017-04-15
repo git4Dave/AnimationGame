@@ -203,13 +203,14 @@ void use_item(){
 
 void checkAttacks(){
   
-  println(p1.getSizeOfCannonBallArrayList());
-  for(int j = 0;j<p1.getSizeOfCannonBallArrayList();j++){
+  println("number of ball on screen "+(p1.getSizeOfCannonBallArrayList()+1));
+  for(int j = 0;j<p1.getSizeOfCannonBallArrayList()+1;j++){
       float ax = p1.getXCoordOfCannonBallInArrayListAtIndex(j);
       float ay = p1.getYCoordOfCannonBallInArrayListAtIndex(j);
       println(ax+" "+ay);
     for(int i = 0;i<enemySize;i++){
           enemytroop[i].checkAttackers((int)ax,(int)ay);
+          enemytroop[i].checkEnemyHitByCannon((int)ax,(int)ay);
      }
   } 
   
@@ -219,7 +220,6 @@ void checkAttacks(){
      }
        enemytroop[i].enemyMoveUP();
   }
-  
   
 }
 
