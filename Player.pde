@@ -48,6 +48,10 @@ class User {
   public float getYCoordOfCannonBallInArrayListAtIndex(int i){
      return cannonballs.get(i).getYcoordForCannonBall();
   }
+  
+  public CannonBall getCannonBallInArrayListAtIndex(int i){
+     return cannonballs.get(i);
+  }
 
   void display() {
 
@@ -60,7 +64,7 @@ class User {
     //Removes the cannonBalls if they exit map to reduce memory usage
     for (int i = cannonballs.size()-1; i >= 0; i--) { 
      CannonBall currentCannonball = cannonballs.get(i);
-      if (currentCannonball.shouldDestroy() || currentCannonball.endBall()) {
+      if (currentCannonball.shouldDestroy() || currentCannonball.endBall() || currentCannonball.hitAnEnemy) {
         cannonballs.remove(i);
       }
     }

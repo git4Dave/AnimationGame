@@ -6,7 +6,7 @@ class Detonation {
   boolean removeExplosion=false;  
   boolean killedEnemy;    
   
-  Detonation(float xCoords, float yCoords, float horizontalVelocity, float verticalVelocity, float sizeOfExplosionPiece,boolean killedEnemy)
+  Detonation(float xCoords, float yCoords, float horizontalVelocity, float verticalVelocity, float sizeOfExplosionPiece, boolean killed)
   {
     xCoordOfExplosion = xCoords;
     yCoordOfExplosion = yCoords;   
@@ -15,12 +15,13 @@ class Detonation {
     explosiveSize = sizeOfExplosionPiece;
     velocityInXDirection = horizontalVelocity;
     velocityInYDirection = verticalVelocity;
-    killedEnemy= killedEnemy;
+    killedEnemy = killed;
   }
   
   void display() {
+    System.out.println(killedEnemy);
     noStroke();
-    if(!killedEnemy){
+    if(killedEnemy == false){
       fill(#FA2C03);
       explosiveSize-=.07;
       rect(explosionXCoord, explosionYCoord, explosiveSize, explosiveSize);
@@ -51,5 +52,6 @@ class Detonation {
     if (explosiveSize<=0) {
       removeExplosion=true;
     }
+    
   } 
  } 

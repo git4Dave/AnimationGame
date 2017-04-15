@@ -91,17 +91,31 @@ class EnemyTroop extends enemy_design{
   }
   
   
-  void checkEnemyHitByCannon(int cannonX,int cannonY){
+  public boolean checkEnemyHitByCannon(float cannonX, float cannonY){
    
     if(abs(getX()-cannonX)<10 && abs(getY()-cannonY)<30){
-        if(enemyLife == 0)
-           setToDead();
-        else
-           enemyGetDamaged();
+        return true;
     }
+     return false;
     
   }//end of checkEnemyHitByCannon
   
+  public void ExecuteCannonBlast(boolean hit, CannonBall can){
+    if(hit){ 
+      System.out.println("Enemy Life is " + enemyLife);
+        if(enemyLife == 0){
+              can.detonateCannonBallWhenEnemyIsKilled();
+               setToDead();
+            }
+        else if(enemyLife != 0){
+          System.out.println("In execute!");
+          can.detonateCannonBallWhenEnemyIsNotKilled();
+           enemyGetDamaged();
+        }
+    }
+        
+  }
+    
   void killEnemy(){
     //kill enemy
     if(abs(mouseX-x)< 5 &&abs(mouseY-Y) < 5 ){

@@ -45,15 +45,17 @@ void setup(){
 
 
 public void checkAttacks(){
-  
+  boolean wasEnemyHit;
   println("number of ball on screen "+(p1.getSizeOfCannonBallArrayList()+1));
   for(int j = 0;j<p1.getSizeOfCannonBallArrayList()+1;j++){
       float ax = p1.getXCoordOfCannonBallInArrayListAtIndex(j);
       float ay = p1.getYCoordOfCannonBallInArrayListAtIndex(j);
+      CannonBall can2 = p1.getCannonBallInArrayListAtIndex(j);
       println(ax+" "+ay);
     for(int i = 0;i<enemySize;i++){
           enemytroop[i].checkAttackers((int)ax,(int)ay);
-          enemytroop[i].checkEnemyHitByCannon((int)ax,(int)ay);
+          wasEnemyHit = enemytroop[i].checkEnemyHitByCannon((int)ax,(int)ay);
+          enemytroop[i].ExecuteCannonBlast(wasEnemyHit, can2);
      }
   } 
   
