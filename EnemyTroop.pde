@@ -33,7 +33,8 @@ class EnemyTroop extends enemy_design{
   
   void showEnery(){
     
-     enemyInMove(x,y);
+     //enemyInMove(x,y);
+     drawEnemy(x,y);
     
     if(Moveforward){
        if(x <= 1050)
