@@ -27,6 +27,31 @@ class Environment{
     popMatrix();
    
  }
+ 
+ 
+ public void displaySecondEnvironment(){
+    fill(#0C5F07);
+    rect(width/2, height - 50, width, 100);
+    
+    //pushMatrix();
+    
+    //translate(330, 0);
+    
+     //fill(100);
+    //triangle(600, height - 45, 615, height - 57, 615, height - 45);
+    //fill(100);
+    //triangle(400, height - 45, 385, height - 57, 385, height - 45);
+    //fill(0, 0, 255);
+    //rect(500, height - 25, 500, 50);
+    
+    //fill(#62450C);
+    //rect(500, height - 92, 500, 15);
+    
+    //fill(#0C5F07);
+    //rect(850, height - 50, 400, 100); 
+    //popMatrix();
+   
+ }
   
      void Lightning(int start, int end, int x, int start2, int end2, int x2, int start3, int end3, int x3) {
 

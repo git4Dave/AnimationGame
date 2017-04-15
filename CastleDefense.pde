@@ -1,14 +1,14 @@
 PImage pm;
 String title, subTitle, welcome;
-String a, b, c;   
+String a, b, c, m;   
 int green;
 boolean showMenu;
 int choice;
 boolean menuAccess;
 int heights = 1000;
 final int enemySize = 30;
-boolean[] isEnemyTakenByAllanceTroopAsTarget = new boolean[enemySize];
 final int DISPLAY_DURATION = 200;
+boolean[] isEnemyTakenByAllanceTroopAsTarget = new boolean[enemySize];
 private int allianceCount = 0;
 
 
@@ -22,6 +22,8 @@ Castle cas;
 Environment en;
 ArrayList <Detonation> explosions;
 ArrayList <allianceTroop> alliTroop = new ArrayList<allianceTroop>();
+boolean firstGame;
+boolean secondGame;
 
 
 void setup(){
@@ -30,14 +32,16 @@ void setup(){
   title = "Defend The Castle";
   subTitle = "Press Enter to Start";
   welcome = "Welcome";
-  a = "p. Play Game";
+  a = "p. Easy";
+  m = "i. Intermediate";
   b = "b. Scores";
   c = "c. How to play game";  
   green = 120;
   showMenu = true;
+  firstGame = false;
+  secondGame = false;
   choice = 0;
   smooth();
-  Arrays.fill(isEnemyTakenByAllanceTroopAsTarget,true);
   menuAccess = true;
    for(int i = 0;i<enemySize;i++){
       enemytroop[i] = new EnemyTroop();
@@ -95,9 +99,10 @@ void draw(){
     textSize(70);
     pushMatrix();
     translate(-150, 0);
-    text(welcome,width/2-100,height/2-100);
+    text(welcome,width/2-100,height/2-200);
     textSize(40);
-    text(a,width/2 - 100,height/2);
+    text(a,width/2 - 100,height/2 - 100);
+    text(m,width/2 - 100,height/2);
     text(b,width/2 - 100,height/2 + 100);
     text(c,width/2 - 100,height/2 + 200);
     textSize(15);
@@ -158,13 +163,45 @@ void draw(){
        break;
      }
        case 2:{
+         if(isAllEnemyDead()){
+            image(pm, 0, 0, width, height);
+            cas = new Castle();
+            can = new Cannon();
+            en = new Environment();           
+            smooth();
+            can.moveCannonAngle2();
+            p1.displaySecond();
+            can.displaySecondCannon();
+            cas.displaySecondCastle();
+            initiateDetonation();
+            get_items();
+            use_item();
+            en.displaySecondEnvironment();
+            displayAllianceTroop();
+            checkAttacks();
+         
+       }else{
+            image(pm, 0, 0, width, height);
+            cas = new Castle();
+            can = new Cannon();
+            en = new Environment(); 
+            smooth();
+            can.moveCannonAngle2();
+            p1.displaySecond();
+            can.displaySecondCannon();
+            cas.displaySecondCastle();
+            en.displaySecondEnvironment(); 
+            displayYouWin();
+       }
+       break;
+       }
+       case 3:{
          //score();
          choice = 0;
          break;
        }
-       case 3:{
+       case 4:{
          insruction();
-         
         break; 
        }
      }//end of switch
@@ -172,6 +209,7 @@ void draw(){
 
   
 }//end of draw
+
 
 public void checkAttacks(){
   
@@ -181,7 +219,7 @@ public void checkAttacks(){
       float ax = p1.getXCoordOfCannonBallInArrayListAtIndex(j);
       float ay = p1.getYCoordOfCannonBallInArrayListAtIndex(j);
       CannonBall can2 = p1.getCannonBallInArrayListAtIndex(j);
-      
+      println(ax+" "+ay);
     for(int i = 0;i<enemySize;i++){
           enemytroop[i].checkAttackers((int)ax,(int)ay);
           //enemytroop[i].checkEnemyHitByCannon((int)ax,(int)ay);
@@ -226,13 +264,20 @@ void insruction(){
 void checkKey(){
   
   if(key == 'p'){
+    secondGame = false;
+    firstGame = true;
     choice = 1;
   }
-  if(key == 'b'){
+  if(key == 'i'){
+      firstGame = false;
+      secondGame = true;
      choice = 2; 
   }
+   if(key == 'b'){
+     choice = 3; 
+  }
   if(key == 'c'){
-    choice = 3;
+    choice = 4;
   }
  
 }
@@ -259,8 +304,6 @@ void getAllianceTroop(){
   while(item.getTroopCount()>0){
       println("allianceTroop created!");
       alliTroop.add(new allianceTroop());
-      int target = getTargetForAllianceTroop();
-      alliTroop.get(alliTroop.size()-1).init(target);
       item.decrementTroopCount();
   }
 }
@@ -319,5 +362,8 @@ void displayYouWin(){
 }
 
 void mousePressed(){
-  p1.shootCannon();
+  if(secondGame == false && firstGame == true)
+    p1.shootCannon();
+  else 
+    p1.shootCannon2();
 }
