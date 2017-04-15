@@ -59,7 +59,7 @@ class EnemyTroop extends enemy_design{
       }
       else{
         float randNumberForGoUp = random(0,15);
-        if(randNumberForGoUp<0.05)
+        if(randNumberForGoUp<0.25)
           setEnemyMoveUPToTrue();
       }
     }
@@ -87,7 +87,7 @@ class EnemyTroop extends enemy_design{
           
     ///once the attcker is gone then start moving forward again
     //(ex - this.x)<0 for once the attacker (cannon ball) is passed
-    if(!Moveforward && ey>500 || (ex - this.x)<0 || this.x<-20)
+    if(!Moveforward && ey>500 || (ex - this.x)<0 || this.x<-10)
           setMoveForward();
   }
   
@@ -103,14 +103,12 @@ class EnemyTroop extends enemy_design{
   
   public void ExecuteCannonBlast(boolean hit, CannonBall can){
     if(hit){ 
-      System.out.println("Enemy Life is " + enemyLife);
         if(enemyLife == 0){
-              can.detonateCannonBallWhenEnemyIsKilled();
+               can.detonateCannonBallWhenEnemyIsKilled();
                setToDead();
             }
         else if(enemyLife != 0){
-          System.out.println("In execute!");
-          can.detonateCannonBallWhenEnemyIsNotKilled();
+           can.detonateCannonBallWhenEnemyIsNotKilled();
            enemyGetDamaged();
         }
     }
