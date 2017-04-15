@@ -14,6 +14,8 @@ class allianceTroop extends enemy_design{
   void showAllianceTroop(){
     
     allianceInMove(x,y);
+    
+    ///if the target enemy is dead then, re-assigned to new target
     if(!enemytroop[targetValue].getIsAlive()){
       println(targetValue+" is dead");
       targetValue = getNewTrget();
@@ -21,8 +23,8 @@ class allianceTroop extends enemy_design{
     }
     
     allianceTroopAttacksEnemy();
+    giveDamageToenemy();
   }
-  
   
   void allianceTroopAttacksEnemy(){
     
@@ -38,6 +40,19 @@ class allianceTroop extends enemy_design{
     
   }//allianceTroopAttacksEnemy
   
+  void giveDamageToenemy(){
+    
+    if(abs(enemytroop[targetValue].getX() - this.x) <5 && abs(enemytroop[targetValue].getY() - this.y) <7){
+        enemytroop[targetValue].enemyGetDamaged();
+        allianceTroopGetDamaged();
+    }
+    
+    
+  }//giveDamageToenemy
+  
+  void allianceTroopGetDamaged(){
+      life--;
+  }
   
   int getNewTrget(){
      int newTarget = getTargetForAllianceTroop();
@@ -51,6 +66,10 @@ class allianceTroop extends enemy_design{
     
     
   }//allianTroopAttackEnemy
+  
+  int getLife(){
+     return life; 
+  }
   
   
 }//end of allianceTroop
