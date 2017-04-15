@@ -13,13 +13,10 @@ class EnemyTroop extends enemy_design{
   final private int ground = 480;
   private float movingDownSpeed;
   private int enemyLife = 3;
-  private int castleAt = 5;
-  public int damageAmountTroopOne;
-  public int damageAmountTroopTwo;
+  private boolean enemryGetsHitAt = false;
   
   EnemyTroop(){
     this.isAlive = true;
-    damageAmountTroopOne = 10;
   };
   
   void setJumpValueForEnemy(){
@@ -34,27 +31,19 @@ class EnemyTroop extends enemy_design{
     this.x = (int)randX;
   }
   
-  public boolean showEnery(){
+  void showEnery(){
     
      //enemyInMove(x,y);
      drawEnemy(x,y);
     
     if(Moveforward){
-       if(x < 1060){
-           x = x+ (int)speed;//moving forward
-       }
-       if(x >= 1060){
-         return true;
-     }
+       if(x <= 1050)
+           x = x+ (int)speed;//moving forward 
     }
     else
       x = x- (int)speed;//moving backard
-  return false;  
-}
-  public void damageCastle(boolean reached){
-   
-    
   }
+  
   void setMoveForward(){
       this.Moveforward = true;
   }
@@ -93,19 +82,22 @@ class EnemyTroop extends enemy_design{
   void checkAttackers(int ex,int ey){
     
     //if the attacker is close enough, move back from it.
-    if(abs(this.y - ey) < 100 && (ex - this.x)<100 && (ex - this.x)>0)
+    if(abs(this.y - ey) < 100 && abs(ex - this.x)<100){
           setMovebackward();
-          
-    ///once the attcker is gone then start moving forward again
-    //(ex - this.x)<0 for once the attacker (cannon ball) is passed
-    if(!Moveforward && ey>500 || (ex - this.x)<0 || this.x<-10)
+      }
+    //println((ex - this.x));
+ //   println(this.x);
+    if( (ex - this.x)<0 || this.x< 50 || this.enemryGetsHitAt){
+          this.enemryGetsHitAt = false;
           setMoveForward();
+    }
   }
   
   
   public boolean checkEnemyHitByCannon(float cannonX, float cannonY){
    
     if(abs(getX()-cannonX)<10 && abs(getY()-cannonY)<30){
+        this.enemryGetsHitAt = true;
         return true;
     }
      return false;
@@ -114,14 +106,12 @@ class EnemyTroop extends enemy_design{
   
   public void ExecuteCannonBlast(boolean hit, CannonBall can){
     if(hit){ 
-      System.out.println("Enemy Life is " + enemyLife);
         if(enemyLife == 0){
-              can.detonateCannonBallWhenEnemyIsKilled();
+               can.detonateCannonBallWhenEnemyIsKilled();
                setToDead();
             }
         else if(enemyLife != 0){
-          System.out.println("In execute!");
-          can.detonateCannonBallWhenEnemyIsNotKilled();
+           can.detonateCannonBallWhenEnemyIsNotKilled();
            enemyGetDamaged();
         }
     }
