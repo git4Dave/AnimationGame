@@ -1,4 +1,4 @@
-PImage pm;
+PImage pm, pm2;
 String title, subTitle, welcome;
 String a, b, c, m;   
 int green;
@@ -24,11 +24,13 @@ ArrayList <Detonation> explosions;
 ArrayList <allianceTroop> alliTroop = new ArrayList<allianceTroop>();
 boolean firstGame;
 boolean secondGame;
+boolean gameOver;
 
 
 void setup(){
   size(1500, 600);
   pm = loadImage("sky.jpg");
+  pm2 = loadImage("NightSky.jpg");
   title = "Defend The Castle";
   subTitle = "Press Enter to Start";
   welcome = "Welcome";
@@ -37,12 +39,13 @@ void setup(){
   b = "b. Scores";
   c = "c. How to play game";  
   green = 120;
-  Arrays.fill(isEnemyTakenByAllanceTroopAsTarget,true);
   showMenu = true;
   firstGame = false;
   secondGame = false;
+  Arrays.fill(isEnemyTakenByAllanceTroopAsTarget,true);
   choice = 0;
   smooth();
+  gameOver = false;
   menuAccess = true;
    for(int i = 0;i<enemySize;i++){
       enemytroop[i] = new EnemyTroop();
@@ -165,7 +168,7 @@ void draw(){
      }
        case 2:{
          if(isAllEnemyDead()){
-            image(pm, 0, 0, width, height);
+            image(pm2, 0, 0, width, height);
             cas = new Castle();
             can = new Cannon();
             en = new Environment();           
@@ -182,7 +185,7 @@ void draw(){
             checkAttacks();
          
        }else{
-            image(pm, 0, 0, width, height);
+            image(pm2, 0, 0, width, height);
             cas = new Castle();
             can = new Cannon();
             en = new Environment(); 
@@ -220,6 +223,7 @@ public void checkAttacks(){
       float ax = p1.getXCoordOfCannonBallInArrayListAtIndex(j);
       float ay = p1.getYCoordOfCannonBallInArrayListAtIndex(j);
       CannonBall can2 = p1.getCannonBallInArrayListAtIndex(j);
+      println(ax+" "+ay);
     for(int i = 0;i<enemySize;i++){
           enemytroop[i].checkAttackers((int)ax,(int)ay);
           //enemytroop[i].checkEnemyHitByCannon((int)ax,(int)ay);
@@ -227,24 +231,39 @@ public void checkAttacks(){
           enemytroop[i].ExecuteCannonBlast(wasEnemyHit, can2);
      }
   } 
-  
+  boolean reachedCastle;
   for(int i = 0;i<enemySize;i++){
      if(enemytroop[i].getIsAlive()){
-        enemytroop[i].showEnery();
+        reachedCastle = enemytroop[i].showEnery();
+        enemytroop[i].damageCastle(reachedCastle);
+        if(reachedCastle == true){
+          if(frameCount % 20 == 0){
+             System.out.println("In hereeeee");
+             _life.getDameged(10);
+             if(_life.getLife() <= 0){
+               gameOver = true;
+                break;
+           }  
      }
        enemytroop[i].enemyMoveUP();
   }
   
 }
+}
+  while(gameOver == true){
+       textSize(100);
+      textAlign(CENTER,CENTER);
+      fill(255,0,0);
+    
+      text("GAME OVER", width/2, height/2); 
+  }
+}
 
+             
 void displayAllianceTroop(){
   
   for(int i = 0;i<alliTroop.size();i++){
       alliTroop.get(i).showAllianceTroop();
-      
-      if(alliTroop.get(i).getLife() == 0){
-        alliTroop.remove(i);
-      }
   }
   
 }//displayAllianceTroop
@@ -306,6 +325,7 @@ boolean isAllEnemyDead(){
 
 void getAllianceTroop(){
   while(item.getTroopCount()>0){
+      println("allianceTroop created!");
       alliTroop.add(new allianceTroop());
       int a = getTargetForAllianceTroop();
       alliTroop.get(alliTroop.size()-1).init(a);
@@ -317,7 +337,6 @@ int getTargetForAllianceTroop(){
  
   for(int i = 0;i<enemySize;i++){
     if(enemytroop[i].getIsAlive() && isEnemyTakenByAllanceTroopAsTarget[i]){
-      println("taget is "+ i);
       isEnemyTakenByAllanceTroopAsTarget[i] = false;
       return i;
     }

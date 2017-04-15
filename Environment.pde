@@ -30,7 +30,7 @@ class Environment{
  
  
  public void displaySecondEnvironment(){
-    fill(#0C5F07);
+    fill(#362304);
     rect(width/2, height - 50, width, 100);
     
     //pushMatrix();

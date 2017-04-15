@@ -14,9 +14,12 @@ class EnemyTroop extends enemy_design{
   private float movingDownSpeed;
   private int enemyLife = 3;
   private int castleAt = 5;
+  public int damageAmountTroopOne;
+  public int damageAmountTroopTwo;
   
   EnemyTroop(){
     this.isAlive = true;
+    damageAmountTroopOne = 10;
   };
   
   void setJumpValueForEnemy(){
@@ -31,19 +34,27 @@ class EnemyTroop extends enemy_design{
     this.x = (int)randX;
   }
   
-  void showEnery(){
+  public boolean showEnery(){
     
      //enemyInMove(x,y);
      drawEnemy(x,y);
     
     if(Moveforward){
-       if(x <= 1050)
-           x = x+ (int)speed;//moving forward 
+       if(x < 1060){
+           x = x+ (int)speed;//moving forward
+       }
+       if(x >= 1060){
+         return true;
+     }
     }
     else
       x = x- (int)speed;//moving backard
+  return false;  
+}
+  public void damageCastle(boolean reached){
+   
+    
   }
-  
   void setMoveForward(){
       this.Moveforward = true;
   }
@@ -103,12 +114,14 @@ class EnemyTroop extends enemy_design{
   
   public void ExecuteCannonBlast(boolean hit, CannonBall can){
     if(hit){ 
+      System.out.println("Enemy Life is " + enemyLife);
         if(enemyLife == 0){
-               can.detonateCannonBallWhenEnemyIsKilled();
+              can.detonateCannonBallWhenEnemyIsKilled();
                setToDead();
             }
         else if(enemyLife != 0){
-           can.detonateCannonBallWhenEnemyIsNotKilled();
+          System.out.println("In execute!");
+          can.detonateCannonBallWhenEnemyIsNotKilled();
            enemyGetDamaged();
         }
     }

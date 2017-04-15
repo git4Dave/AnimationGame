@@ -1,13 +1,14 @@
 class life{
   
- private int life = 100;
+ private int life;
  
  life(int life){
     this.life = life;
  }
  
  void getDameged(int x){
-     this.life = this.life -x;
+   System.out.println("HEEYYYYYYY");
+     this.life = this.life - x;
  }
  
  int getLife(){
@@ -24,6 +25,7 @@ class life{
  
  void showLife(){
    textSize(50);
+   fill(250, 250, 0);
    text("Life: "+life,width/2-50,100);
    textSize(15);
  }

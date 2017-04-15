@@ -11,6 +11,7 @@ class Item{
   private boolean isTroopOnScreen = false;//flag if the star is currently on the screen
   private int lightning_count = 0;
   private int Troop_count = 0;
+
   
   int getStarX_lightning(){
       return starX_lightning;
@@ -49,19 +50,19 @@ class Item{
   void decrementTroopCount(){
       Troop_count--;
   }
-  
+    
   void showLighningCount(){
     fill(255,255,0);
-    ellipse(width - 260,25,starSize,starSize);
-    fill(0);
-    text("lightning:"+lightning_count,width - 250,30);
+    ellipse(width-260,25,starSize,starSize);
+    fill(255, 255, 0);
+    text("lightning:"+lightning_count,width-250,30);
   }
   
   void showTroopCount(){
     fill(255,0,255);
-    ellipse(width - 260,45,starSize,starSize);
-    fill(0);
-    text("Troop     :"+Troop_count, width - 250,50);
+    ellipse(width-260,45,starSize,starSize);
+    fill(255, 255, 0);
+    text("Troop     :"+Troop_count,width-250,50);
   }
   
   void updateStarY_lightning(){
@@ -157,7 +158,7 @@ class Item{
   ///if rand < 0.01 star will appear.
   boolean isLightning(){
     float rand = random(0,50); 
-    println(rand);
+  //  println(rand);
     if(rand<4.1){///feels like this happen every 5-10 seconds
       float randX = random(0,heights);
       starY_lightning = 0;
@@ -171,7 +172,7 @@ class Item{
     ///if rand < 0.01 star will appear.
   boolean isLife(){
     float rand = random(0,50); 
-    println(rand);
+  //  println(rand);
     if(rand<0.3){///feels like this happen every 5-10 seconds
       float randX = random(0,heights);
       starY_life = 0;
@@ -185,8 +186,8 @@ class Item{
       ///if rand < 0.01 star will appear.
   boolean isTroop(){
     float rand = random(0,50); 
-    println(rand);
-    if(rand<0.4){///feels like this happen every 5-10 seconds
+   // println(rand);
+    if(rand<5){///feels like this happen every 5-10 seconds
       float randX = random(0,heights);
       starY_Troop = 0;
       starX_Troop = (int)randX;
