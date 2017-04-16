@@ -25,7 +25,7 @@ class EnemyTroop extends enemy_design{
   }
   
   void setUpInitialPositionForEnemy(){
-    float randSpeed = random(2,5);
+    float randSpeed = random(5,10);
     float randX = random(-300,10);
     this.speed = randSpeed;//each enemy will have a diffrent moving speed
     this.x = (int)randX;
@@ -82,12 +82,12 @@ class EnemyTroop extends enemy_design{
   void checkAttackers(int ex,int ey){
     
     //if the attacker is close enough, move back from it.
-    if(abs(this.y - ey) < 100 && abs(ex - this.x)<100){
+    if(abs(this.y - ey) < 50 && abs(ex - this.x)<150){
           setMovebackward();
       }
     //println((ex - this.x));
  //   println(this.x);
-    if( (ex - this.x)<0 || this.x< 50 || this.enemryGetsHitAt){
+    if( (ex - this.x)<0 || (ey - this.y)>50 || this.x< 50 || this.enemryGetsHitAt){
           this.enemryGetsHitAt = false;
           setMoveForward();
     }
