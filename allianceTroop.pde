@@ -44,10 +44,9 @@ class allianceTroop extends enemy_design{
     
     if(abs(enemytroop[targetValue].getX() - this.x) <5 && abs(enemytroop[targetValue].getY() - this.y) <7){
         enemytroop[targetValue].enemyGetDamaged();
+        enemytroop[targetValue].IsEnemyDead();
         allianceTroopGetDamaged();
     }
-    
-    
   }//giveDamageToenemy
   
   void allianceTroopGetDamaged(){
@@ -59,13 +58,6 @@ class allianceTroop extends enemy_design{
      return newTarget;
   }
   
-  void allianTroopAttackEnemy(){
-    
-    for(int j = 0;j<alliTroop.size();j++){
-    }
-    
-    
-  }//allianTroopAttackEnemy
   
   int getLife(){
      return life; 
