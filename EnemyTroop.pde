@@ -145,6 +145,11 @@ class EnemyTroop extends enemy_design{
     this.enemyLife--;
   }
   
+  void IsEnemyDead(){
+    if(enemyLife == 0)
+      setToDead();
+  }
+  
   void setToDead(){
      this.isAlive = false;
      x = 0;//set the x value to x;
