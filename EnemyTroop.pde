@@ -14,9 +14,6 @@ class EnemyTroop extends enemy_design{
   private float movingDownSpeed;
   private int enemyLife = 3;
   private boolean enemryGetsHitAt = false;
-  private boolean enemyEscapeFromCannonBallVertically = true;
- 
-  
 
   EnemyTroop(){
     this.isAlive = true;
@@ -27,43 +24,69 @@ class EnemyTroop extends enemy_design{
      this.movingDownSpeed = rand;
   }
   
-  void setUpInitialPositionForEnemy(){
-    float randSpeed = random(5,10);
-    float randX = random(-300,10);
-    this.speed = randSpeed;//each enemy will have a diffrent moving speed
-    this.x = (int)randX;
+  void enemyComeFromRightSide(){
+    
   }
   
-  public boolean showEnery(){
+  void setUpInitialPositionForEnemy(boolean isLeft){
+    
+    if(isLeft){
+        float randSpeed = random(5,10);
+        float randX = random(-300,10);
+        this.speed = randSpeed;//each enemy will have a diffrent moving speed
+        this.x = (int)randX;
+    }
+    else{
+        float randSpeed = random(5,10);
+        float randX = random(1500,1700);
+        this.speed = randSpeed;//each enemy will have a diffrent moving speed
+        this.x = (int)randX;
+    }
+  }
+  
+  
+  boolean showEnemyRightSide(){
+    
+      drawEnemy(x,y);
+      if(Moveforward){
+         if(x > 850)
+             x = x- (int)speed;//moving forward
+         if(x >= 550 && x<=850)
+              return true;
+      }
+      else
+        x = x+ (int)speed;//moving backard
+        return false;
+  }
+  
+  boolean showEnery(){
     
      //enemyInMove(x,y);
      drawEnemy(x,y);
+     
     if(firstGame){
-    if(Moveforward){
-       if(x < 1060)
-           x = x+ (int)speed;//moving forward
-       if(x >= 1060)
-         return true;
-
+      if(Moveforward ){
+         if(x <= 1060)
+             x = x+ (int)speed;//moving forward
+         if(x >= 1060)
+           return true;
+      }
+      else
+        x = x- (int)speed;//moving backard
+        return false;
+    }else{
+      if(Moveforward ){
+         if(x < 550)
+             x = x+ (int)speed;//moving forward
+         if(x >= 550 && x<= 900)
+              return true;
+      }
+      else
+        x = x- (int)speed;//moving backard
+        return false;
     }
-    else
-      x = x- (int)speed;//moving backard
-      return false;  
+    
   }
-  else{
-     if(Moveforward){
-       if(x < 550)
-           x = x+ (int)speed;//moving forward
-       if(x >= 550)
-         return true;
-
-    }
-    else
-      x = x- (int)speed;//moving backard
-      return false;  
-  }
-}
-
   
   void setMoveForward(){
       this.Moveforward = true;
@@ -92,6 +115,8 @@ class EnemyTroop extends enemy_design{
     }
   }//end of enemyMoveUP
   */
+  
+
   void enemyMoveUP(){
     
     if(!enemyMoveGoUp){
@@ -121,6 +146,41 @@ class EnemyTroop extends enemy_design{
     enemyMoveGoUp = true;
   }
   
+/*
+  
+    determines how the enemy moves 
+    
+    the enemy moves will be determine by the ball location
+  
+  
+*/
+    void checkAttackersForRightEnemy(int ex,int ey){
+    
+    //if the attacker is close enough, move back from it.
+    
+    println(this.x+" " +ex);
+    //move horizontally 
+    if(abs(this.y - ey) < 150 && abs(ex - this.x)<150){
+         setMovebackward();
+      }
+
+    if(  abs(this.y - ey )>150 || this.x > 1400 ){
+          this.enemryGetsHitAt = false;
+          setMoveForward();
+      }
+       
+   ///move vertically
+
+    if(abs(this.y - ey) < 150 && abs(ex - this.x)<200 && ey > this.y){
+        setEnemyMoveUPToTrue();
+     }
+     
+    if(abs(this.y - ey) < 150 && abs(ex - this.x)<200 && this.y >= ey){
+        setEnemyMoveUPToFalse();
+     }
+    
+  }
+  
   void checkAttackers(int ex,int ey){
     
     //if the attacker is close enough, move back from it.
@@ -144,12 +204,9 @@ class EnemyTroop extends enemy_design{
      
     if(abs(this.y - ey) < 150 && abs(ex - this.x)<200 && this.y >= ey){
         setEnemyMoveUPToFalse();
-      }
-     
-      //checkEnemyVertivally(ex,ey);
+     }
     
   }
-
   
   public boolean checkEnemyHitByCannon(float cannonX, float cannonY){
    
