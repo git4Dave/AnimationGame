@@ -34,18 +34,36 @@ class EnemyTroop extends enemy_design{
     this.x = (int)randX;
   }
   
-  void showEnery(){
+  public boolean showEnery(){
     
      //enemyInMove(x,y);
      drawEnemy(x,y);
-    
+    if(firstGame){
     if(Moveforward){
-       if(x <= 1050)
-           x = x+ (int)speed;//moving forward 
+       if(x < 1060)
+           x = x+ (int)speed;//moving forward
+       if(x >= 1060)
+         return true;
+
     }
     else
       x = x- (int)speed;//moving backard
+      return false;  
   }
+  else{
+     if(Moveforward){
+       if(x < 550)
+           x = x+ (int)speed;//moving forward
+       if(x >= 550)
+         return true;
+
+    }
+    else
+      x = x- (int)speed;//moving backard
+      return false;  
+  }
+}
+
   
   void setMoveForward(){
       this.Moveforward = true;
