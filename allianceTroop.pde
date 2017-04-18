@@ -37,14 +37,14 @@ class allianceTroop extends enemy_design{
   void allianceTroopAttacksEnemy(){
     
     if(enemytroop[targetValue].getX() - this.x >0)
-       this.x++;
+       this.x = this.x+2;
      else
-       this.x--;
+       this.x = this.x - 2;
        
     if(enemytroop[targetValue].getY() - this.y >0)
-       this.y++;
+       this.y = this.y+2;
      else
-       this.y--;
+       this.y = this.y-2;
     
   }//allianceTroopAttacksEnemy
   
