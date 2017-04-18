@@ -1,3 +1,4 @@
+
 import processing.sound.*;
 SoundFile warDrumsSound, cannonShotSound, swordsClashingSound, explosionSound;
 
@@ -9,11 +10,12 @@ boolean showMenu;
 int choice;
 boolean menuAccess;
 int heights = 1000;
-final int enemySize = 20;
+final int enemySize = 30;
 final int DISPLAY_DURATION = 200;
 boolean[] isEnemyTakenByAllanceTroopAsTarget = new boolean[enemySize];
 private int allianceCount = 0;
-private int lifeCount = 450;
+int countToWaitForMenu;
+private int lifeCount = 600;
 
 
 life _life = new life(lifeCount);///life of the castle
@@ -21,6 +23,7 @@ Item item = new Item();
 User p1 = new User();
 EnemyTroop enemytroop[] = new EnemyTroop[enemySize];
 EnemyTroop enemytroopRightSide[] = new EnemyTroop[enemySize];
+
 
 Cannon can;
 Castle cas;
@@ -30,20 +33,18 @@ ArrayList <allianceTroop> alliTroop = new ArrayList<allianceTroop>();
 boolean firstGame;
 boolean secondGame;
 boolean gameOver;
-int pauseCount;
+boolean displayMenuAgain;
 
 
 void setup(){
   size(1500, 600);
   pm = loadImage("sky.jpg");
   pm2 = loadImage("NightSky.jpg");
-  /*
   warDrumsSound = new SoundFile(this, "WarDrums.wav");
   cannonShotSound = new SoundFile(this, "CannonShot.wav");
   swordsClashingSound = new SoundFile(this, "SwordsClashing.wav");
   explosionSound = new SoundFile(this, "Explosion.wav");
- // warDrumsSound.loop();
- */
+  warDrumsSound.loop();
   title = "Defend The Castle";
   subTitle = "Press Enter to Start";
   welcome = "Welcome";
@@ -52,10 +53,11 @@ void setup(){
   b = "b. Scores";
   c = "c. How to play game";  
   green = 120;
-  pauseCount = 0;
+  countToWaitForMenu = 0;
   showMenu = true;
   firstGame = false;
   secondGame = false;
+  displayMenuAgain = false;
   Arrays.fill(isEnemyTakenByAllanceTroopAsTarget,true);
   choice = 0;
   smooth();
@@ -65,14 +67,12 @@ void setup(){
       enemytroop[i] = new EnemyTroop();
       enemytroop[i].setUpInitialPositionForEnemy(true);
       enemytroop[i].setJumpValueForEnemy();
-    }
-    
-   for(int i = 0;i<enemySize;i++){
+  }
+  for(int i = 0;i<enemySize;i++){
       enemytroopRightSide[i] = new EnemyTroop();
       enemytroopRightSide[i].setUpInitialPositionForEnemy(false);
       enemytroopRightSide[i].setJumpValueForEnemy();
-    }
-    
+  }
   cursor(CROSS);
   explosions = new ArrayList<Detonation>();
 }
@@ -88,7 +88,7 @@ void initiateDetonation() {
     detonationOccurred = true;
   }
   if(detonationOccurred == true){
-   // explosionSound.play();
+    explosionSound.play();
   }
   
   for (int i = explosions.size()-1; i>=0; i--) {
@@ -122,6 +122,24 @@ void draw(){
     popMatrix();
   }//end of showtitle
   
+  
+ void showTitle2(){
+    //PFont m;
+   // m = loadFont("Symbola-48.vlw");
+    pushMatrix();
+    strokeWeight(15);
+    fill(0,green+50,0);
+    //textFont(m); 
+    textSize(70);
+    translate(-100, 0);
+    text(title,width/2,height/2);
+    textSize(25);
+    text(subTitle,width/2,height/2 + 100);
+    textSize(15);
+    strokeWeight(8);
+    popMatrix();
+  }//end of showtitle
+  
    void mainMenu(){
     background(0);
     fill(0,green+50,0);
@@ -129,34 +147,36 @@ void draw(){
     textSize(70);
     pushMatrix();
     translate(-150, 0);
-    text(welcome,width/2-100,height/2-200);
+    text(welcome,width/2,height/2-200);
     textSize(40);
-    text(a,width/2 - 100,height/2 - 100);
-    text(m,width/2 - 100,height/2);
-    text(b,width/2 - 100,height/2 + 100);
-    text(c,width/2 - 100,height/2 + 200);
+    text(a,width/2,height/2 - 100);
+    text(m,width/2,height/2);
+    text(b,width/2,height/2 + 100);
+    text(c,width/2,height/2 + 200);
     textSize(15);
     popMatrix();
   }
   
   public void displayMenu(){
-   if(key == ENTER)
-     showMenu = false;
-  
-   if(showMenu){
-     background(0);
-     showTitle();
-   }
-   else{
-     mainMenu();
-     
-     checkKey();
      
 //     if(choice == 0) //only run at the welcome screen
 
      
      switch(choice){
+       
+        case 0:{   
+       if(key == ENTER)
+         showMenu = false;
       
+       if(showMenu){
+         background(0);
+         showTitle();
+       }
+       else{
+         choice = 7;
+       }
+       break;
+        }
        //methods to do games 
        case 1 :{
          
@@ -181,19 +201,18 @@ void draw(){
             image(pm, 0, 0, width, height);
             cas = new Castle();
             can = new Cannon();
-            en = new Environment();
+            en = new Environment(); 
             smooth();
             can.moveCannonAngle();
             p1.display();
             can.display();
             cas.display();
-            en.display();
+            en.display(); 
             displayYouWin();
        }
        break;
      }
        case 2:{
-         //intermidiate
          if(isAllEnemyDead()){
             image(pm2, 0, 0, width, height);
             cas = new Castle();
@@ -210,7 +229,6 @@ void draw(){
             en.displaySecondEnvironment();
             displayAllianceTroop();
             checkAttacks();
-            checkAttacksForRightEnemy();
          
        }else{
             image(pm2, 0, 0, width, height);
@@ -236,11 +254,144 @@ void draw(){
          insruction();
         break; 
        }
+       case 5:{
+           _life.showLife();
+               gameOver = true;
+               textSize(100);
+                textAlign(CENTER,CENTER);
+                fill(255,0,0);
+                
+                text("GAME OVER", width/2, height/2);
+          
+          countToWaitForMenu++;
+          
+          if(countToWaitForMenu % 300 == 0)
+          { 
+            choice = 6;
+             for(int i = 0; i < enemySize; i++)
+             {
+                enemytroop[i].setToDead();
+             }
+            // goBackToMenu = true;
+          }
+         
+         break;
+         
+       }
+       case 6:{
+          textAlign(CENTER,CENTER);
+         _life.resetLife(lifeCount);
+      countToWaitForMenu = 0;
+      showMenu = true;
+      firstGame = false;
+      secondGame = false;
+      Arrays.fill(isEnemyTakenByAllanceTroopAsTarget,true);
+      smooth();
+      gameOver = false;
+      menuAccess = true;
+       for(int i = 0;i<enemySize;i++){
+         choice = 0;
+          enemytroop[i] = new EnemyTroop();
+          enemytroop[i].setUpInitialPositionForEnemy(true);
+          enemytroop[i].setJumpValueForEnemy();
+      }
+         displayMenuAgain = true;
+         break;
+       }
+       case 7:{
+          textAlign(CENTER,CENTER);
+        mainMenu();
+         
+         checkKey(); 
+         break;
+       }
      }//end of switch
-   }//end of else
 
   
 }//end of draw
+
+
+public void checkAttacks(){
+  
+//  println("number of ball on screen "+(p1.getSizeOfCannonBallArrayList()+1));
+  boolean wasEnemyHit;
+  //for(int j = 0;j<p1.getSizeOfCannonBallArrayList()+1;j++){
+  //    float ax = p1.getXCoordOfCannonBallInArrayListAtIndex(j);
+  //    float ay = p1.getYCoordOfCannonBallInArrayListAtIndex(j);
+  //    CannonBall can2 = p1.getCannonBallInArrayListAtIndex(j);
+  //    println(ax+" "+ay);
+      int NumberOfCannonBallOnScreen = p1.getSizeOfCannonBallArrayList()+1;
+   println(NumberOfCannonBallOnScreen);
+   boolean reachedCastle;
+   if(NumberOfCannonBallOnScreen == 0){
+    for(int i = 0;i<enemySize;i++){
+         enemytroop[i].setMoveForward();  
+   }
+  } 
+   else{
+       for(int k = 0;k<NumberOfCannonBallOnScreen;k++){
+           float ax2 = p1.getXCoordOfCannonBallInArrayListAtIndex(k);
+           float ay2 = p1.getYCoordOfCannonBallInArrayListAtIndex(k);
+           CannonBall can3 = p1.getCannonBallInArrayListAtIndex(k);
+         for(int i = 0;i<enemySize;i++){
+           
+               enemytroop[i].checkAttackers((int)ax2,(int)ay2);
+               //enemytroop[i].checkEnemyHitByCannon((int)ax,(int)ay);
+               wasEnemyHit = enemytroop[i].checkEnemyHitByCannon((int)ax2,(int)ay2);
+               enemytroop[i].ExecuteCannonBlast(wasEnemyHit, can3);
+         }
+      } 
+  }
+  for(int i = 0;i<enemySize;i++){
+     if(enemytroop[i].getIsAlive()){
+        reachedCastle = enemytroop[i].showEnery();
+        if(reachedCastle == true){
+          if(frameCount % 20 == 0){
+             System.out.println("In hereeeee");
+             _life.getDameged(3);
+             swordsClashingSound.play();
+             if(_life.getLife() <= 0){
+              choice = 5;
+              countToWaitForMenu = 0;
+                break;
+           }  
+     }
+  }
+     }
+     enemytroop[i].enemyMoveUP();
+  
+}
+}
+
+
+             
+void displayAllianceTroop(){
+  
+  for(int i = 0;i<alliTroop.size();i++){
+      alliTroop.get(i).showAllianceTroop();
+      if(alliTroop.get(i).getLife() == 0){
+         alliTroop.remove(i);
+       }
+  }
+  
+}//displayAllianceTroop
+
+void insruction(){
+  background(0);
+  
+  String howToPlay ="instruction goes here...";
+  String quit = "Hit 'q' to quit ";
+  pushMatrix();
+  translate(-150, 0);
+  text(howToPlay,width/2,height/2);
+  text(quit,width/2,height/2 + 250);
+  popMatrix();
+  
+  if(key == 'q'){
+    choice = 0;
+  }
+  
+}
 
 public void checkAttacksForRightEnemy(){
   
@@ -298,94 +449,6 @@ public void checkAttacksForRightEnemy(){
   
 }
 
-public void checkAttacks(){
-  
-//  println("number of ball on screen "+(p1.getSizeOfCannonBallArrayList()+1));
-  boolean wasEnemyHit;
-  //for(int j = 0;j<p1.getSizeOfCannonBallArrayList()+1;j++){
-  //    float ax = p1.getXCoordOfCannonBallInArrayListAtIndex(j);
-  //    float ay = p1.getYCoordOfCannonBallInArrayListAtIndex(j);
-  //    CannonBall can2 = p1.getCannonBallInArrayListAtIndex(j);
-  //    println(ax+" "+ay);
-   int NumberOfCannonBallOnScreen = p1.getSizeOfCannonBallArrayList()+1;
-   println(NumberOfCannonBallOnScreen);
-   boolean reachedCastle;
-   if(NumberOfCannonBallOnScreen == 0){
-    for(int i = 0;i<enemySize;i++){
-         enemytroop[i].setMoveForward();  
-     }
-     
-  } 
-   else{
-       for(int k = 0;k<NumberOfCannonBallOnScreen;k++){
-           float ax2 = p1.getXCoordOfCannonBallInArrayListAtIndex(k);
-           float ay2 = p1.getYCoordOfCannonBallInArrayListAtIndex(k);
-           CannonBall can3 = p1.getCannonBallInArrayListAtIndex(k);
-         for(int i = 0;i<enemySize;i++){
-           
-               enemytroop[i].checkAttackers((int)ax2,(int)ay2);
-               //enemytroop[i].checkEnemyHitByCannon((int)ax,(int)ay);
-               wasEnemyHit = enemytroop[i].checkEnemyHitByCannon((int)ax2,(int)ay2);
-               enemytroop[i].ExecuteCannonBlast(wasEnemyHit, can3);
-         }
-      } 
-  }
-  for(int i = 0;i<enemySize;i++){
-     if(enemytroop[i].getIsAlive()){
-        reachedCastle = enemytroop[i].showEnery();
-        if(reachedCastle == true){
-          if(frameCount % 20 == 0){
-             System.out.println("In hereeeee");
-             _life.getDameged(3);
-           //  swordsClashingSound.play();
-             if(_life.getLife() <= 0){
-               _life.showLife();
-               gameOver = true;
-               textSize(100);
-                textAlign(CENTER,CENTER);
-                fill(255,0,0);
-                
-                text("GAME OVER", width/2, height/2);
-                noLoop();
-                break;
-           }  
-     }
-  }
-     }
-     enemytroop[i].enemyMoveUP();
-  
-}
-}
-
-
-             
-void displayAllianceTroop(){
-  
-  for(int i = 0;i<alliTroop.size();i++){
-      alliTroop.get(i).showAllianceTroop();
-      if(alliTroop.get(i).getLife() == 0){
-         alliTroop.remove(i);
-       }
-  }
-  
-}//displayAllianceTroop
-
-void insruction(){
-  background(0);
-  
-  String howToPlay ="instruction goes here...";
-  String quit = "Hit 'q' to quit ";
-  pushMatrix();
-  translate(-150, 0);
-  text(howToPlay,width/2,height/2);
-  text(quit,width/2,height/2 + 250);
-  popMatrix();
-  
-  if(key == 'q'){
-    choice = 0;
-  }
-  
-}
 void checkKey(){
   
   if(key == 'p'){
@@ -487,7 +550,7 @@ void resetEnemyPosition(){
  for(int i = 0; i < enemySize; i++){
     enemytroop[i].setToAlive();
     enemytroop[i].setUpInitialPositionForEnemy(true);
-    _life.resetLife();
+   
  }
 }
 
@@ -502,10 +565,10 @@ void displayYouWin(){
 void mousePressed(){
   if(secondGame == false && firstGame == true){
     p1.shootCannon();
-  //  cannonShotSound.play();
+    cannonShotSound.play();
   }
   else{
     p1.shootCannon2();
-  //  cannonShotSound.play();
+    cannonShotSound.play();
   }
 }
