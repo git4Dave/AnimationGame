@@ -53,14 +53,14 @@ class Item{
     
   void showLighningCount(){
     fill(255,255,0);
-    ellipse(width-260,25,starSize,starSize);
+    ellipse(width-310,30,starSize,starSize);
     fill(255, 255, 0);
     text("lightning:"+lightning_count,width-250,30);
   }
   
   void showTroopCount(){
     fill(255,0,255);
-    ellipse(width-260,45,starSize,starSize);
+    ellipse(width-310,50,starSize,starSize);
     fill(255, 255, 0);
     text("Troop     :"+Troop_count,width-250,50);
   }
