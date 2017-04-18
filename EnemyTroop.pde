@@ -47,7 +47,7 @@ class EnemyTroop extends enemy_design{
   
   boolean showEnemyRightSide(){
     
-      drawEnemy(x,y);
+      drawEnemyFromRight(x,y);
       if(Moveforward){
          if(x > 850)
              x = x- (int)speed;//moving forward
@@ -62,7 +62,7 @@ class EnemyTroop extends enemy_design{
   boolean showEnery(){
     
      //enemyInMove(x,y);
-     drawEnemy(x,y);
+     drawEnemy(x,y, firstGame);
      
     if(firstGame){
       if(Moveforward ){
