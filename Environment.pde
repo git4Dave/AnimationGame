@@ -3,7 +3,7 @@ class Environment{
  public Environment(){
 
  }
- 
+ //displays environment for first game
  public void display(){
     fill(#0C5F07);
     rect(265, height - 50, 630, 100);
@@ -28,7 +28,7 @@ class Environment{
    
  }
  
- 
+  //displays environment for second game
  public void displaySecondEnvironment(){
     fill(#362304);
     rect(width/2, height - 50, width, 100);
@@ -52,8 +52,9 @@ class Environment{
     //popMatrix();
    
  }
-  
-     void Lightning(int start, int end, int x, int start2, int end2, int x2, int start3, int end3, int x3) {
+    
+//displays the lightning animation 
+void Lightning(int start, int end, int x, int start2, int end2, int x2, int start3, int end3, int x3) {
 
     ///x range 
     float dx = random(-15, 15);
@@ -85,8 +86,8 @@ class Environment{
     Lightning(start+5, end, x+(int)dx, start2+5, end2, x2+(int)dx2, start3+5, end3, x3+(int)dx3);
   }
   
-  
-   void killEnemyLightning(int x,int x2,int x3){
+  //damages enemies by lightning
+void killEnemyLightning(int x,int x2,int x3){
      
      for(int i = 0;i<enemySize;i++){
          if(abs(enemytroop[i].getX()-x)<10)
