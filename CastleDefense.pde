@@ -1,6 +1,6 @@
 
 import processing.sound.*;
-SoundFile warDrumsSound, cannonShotSound, swordsClashingSound, explosionSound;
+SoundFile warDrumsSound, cannonShotSound, swordsClashingSound, lightningSound;
 
 PImage pm, pm2;
 String title, subTitle, welcome;
@@ -33,7 +33,7 @@ ArrayList <allianceTroop> alliTroop = new ArrayList<allianceTroop>();
 boolean firstGame;
 boolean secondGame;
 boolean gameOver;
-boolean displayMenuAgain;
+boolean showMenuAgain;
 
 
 void setup(){
@@ -43,7 +43,7 @@ void setup(){
   warDrumsSound = new SoundFile(this, "WarDrums.wav");
   cannonShotSound = new SoundFile(this, "CannonShot.wav");
   swordsClashingSound = new SoundFile(this, "SwordsClashing.wav");
-  explosionSound = new SoundFile(this, "Explosion.wav");
+  lightningSound = new SoundFile(this, "Lightning.wav");
   warDrumsSound.loop();
   title = "Defend The Castle";
   subTitle = "Press Enter to Start";
@@ -57,7 +57,7 @@ void setup(){
   showMenu = true;
   firstGame = false;
   secondGame = false;
-  displayMenuAgain = false;
+  showMenuAgain = false;
   Arrays.fill(isEnemyTakenByAllanceTroopAsTarget,true);
   choice = 0;
   smooth();
@@ -87,9 +87,9 @@ void initiateDetonation() {
     d.display(); 
     detonationOccurred = true;
   }
-  if(detonationOccurred == true){
-    explosionSound.play();
-  }
+  //if(detonationOccurred == true){
+  //  explosionSound.play();
+  //}
   
   for (int i = explosions.size()-1; i>=0; i--) {
     Detonation d = (Detonation) explosions.get(i);
@@ -168,7 +168,11 @@ void draw(){
        if(key == ENTER)
          showMenu = false;
       
-       if(showMenu){
+       if(showMenu && showMenuAgain == true){
+         background(0);
+         showTitle2();
+       }
+       else if(showMenu){
          background(0);
          showTitle();
        }
@@ -229,6 +233,7 @@ void draw(){
             en.displaySecondEnvironment();
             displayAllianceTroop();
             checkAttacks();
+            checkAttacksForRightEnemy();
          
        }else{
             image(pm2, 0, 0, width, height);
@@ -295,7 +300,12 @@ void draw(){
           enemytroop[i].setUpInitialPositionForEnemy(true);
           enemytroop[i].setJumpValueForEnemy();
       }
-         displayMenuAgain = true;
+      for(int i = 0;i<enemySize;i++){
+      enemytroopRightSide[i] = new EnemyTroop();
+      enemytroopRightSide[i].setUpInitialPositionForEnemy(false);
+      enemytroopRightSide[i].setJumpValueForEnemy();
+  }
+         showMenuAgain = true;
          break;
        }
        case 7:{
@@ -348,7 +358,7 @@ public void checkAttacks(){
         if(reachedCastle == true){
           if(frameCount % 20 == 0){
              System.out.println("In hereeeee");
-             _life.getDameged(3);
+             _life.getDameged(2);
              swordsClashingSound.play();
              if(_life.getLife() <= 0){
               choice = 5;
@@ -429,16 +439,11 @@ public void checkAttacksForRightEnemy(){
             reachedCastle = enemytroopRightSide[i].showEnemyRightSide();
             if(reachedCastle == true){
               if(frameCount % 20 == 0){
-                 _life.getDameged(3);
-               //  swordsClashingSound.play();
+                 _life.getDameged(2);
+                 swordsClashingSound.play();
                  if(_life.getLife() <= 0){
-                   _life.showLife();
-                   gameOver = true;
-                   textSize(100);
-                    textAlign(CENTER,CENTER);
-                    fill(255,0,0);
-                    text("GAME OVER", width/2, height/2);
-                    noLoop();
+                   countToWaitForMenu = 0;
+                    choice = 5;
                     break;
                }
          }
@@ -529,9 +534,10 @@ void use_item(){
          en.Lightning(0,1000,400,0,1000,400,0,1000,400);
          en.Lightning(0,1000,700,0,1000,700,0,1000,700);
          en.Lightning(0,1000,1000,0,1000,1000,0,1000,1000);
-         
+          lightningSound.play(); 
     //   }
         item.decrementLightningCount();
+        
   }
   else if (key == 'h'){
      getAllianceTroop();
@@ -550,8 +556,15 @@ void resetEnemyPosition(){
  for(int i = 0; i < enemySize; i++){
     enemytroop[i].setToAlive();
     enemytroop[i].setUpInitialPositionForEnemy(true);
+    enemytroopRightSide[i].setToAlive();
+    enemytroopRightSide[i].setUpInitialPositionForEnemy(false);
    
  }
+ 
+ int i = 0;
+ for(; i<alliTroop.size(); i++){
+   alliTroop.remove(i);
+}
 }
 
 void displayYouWin(){
