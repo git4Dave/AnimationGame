@@ -1,4 +1,3 @@
-
 import processing.sound.*;
 SoundFile warDrumsSound, cannonShotSound, swordsClashingSound, lightningSound;
 
@@ -10,8 +9,8 @@ private boolean showMenu;
 private int choice;
 private boolean menuAccess;
 private int heights = 1000;
-final int enemySize = 30;
-final int DISPLAY_DURATION = 200;
+private final int enemySize = 10;
+private final int DISPLAY_DURATION = 200;
 private boolean[] isEnemyTakenByAllanceTroopAsTarget = new boolean[enemySize];
 private boolean[] isEnemyTakenByAllanceTroopAsTargetRight = new boolean[enemySize];
 private int allianceCount = 0;
@@ -34,7 +33,7 @@ ArrayList <allianceTroop> alliTroop = new ArrayList<allianceTroop>();
 boolean firstGame;
 boolean secondGame;
 boolean gameOver;
-boolean showMenuAgain, secondGameEnded;
+boolean showMenuAgain;
 
 
 void setup(){
@@ -51,7 +50,6 @@ void setup(){
   welcome = "Welcome";
   a = "p. Easy";
   m = "i. Intermediate";
-  b = "b. Scores";
   c = "c. How to play game";  
   green = 120;
   countToWaitForMenu = 0;
@@ -59,9 +57,8 @@ void setup(){
   firstGame = false;
   secondGame = false;
   showMenuAgain = false;
-  secondGameEnded = false;
   Arrays.fill(isEnemyTakenByAllanceTroopAsTarget,true);
-   Arrays.fill(isEnemyTakenByAllanceTroopAsTargetRight,true);
+  Arrays.fill(isEnemyTakenByAllanceTroopAsTargetRight,true);
   choice = 0;
   smooth();
   gameOver = false;
@@ -154,8 +151,7 @@ void draw(){
     textSize(40);
     text(a,width/2,height/2 - 100);
     text(m,width/2,height/2);
-    text(b,width/2,height/2 + 100);
-    text(c,width/2,height/2 + 200);
+    text(c,width/2,height/2 + 100);
     textSize(15);
     popMatrix();
   }
@@ -188,7 +184,6 @@ void draw(){
        case 1 :{
          
          if(isAllEnemyDead()){
-           secondGameEnded = false; 
             image(pm, 0, 0, width, height);
             cas = new Castle();
             can = new Cannon();
@@ -222,7 +217,6 @@ void draw(){
      }
        case 2:{
          if(isAllEnemyDead()){
-            secondGameEnded = false; 
             image(pm2, 0, 0, width, height);
             cas = new Castle();
             can = new Cannon();
@@ -239,9 +233,6 @@ void draw(){
             displayAllianceTroop();
             checkAttacks();
             checkAttacksForRightEnemy();
-            if(choice == 5){
-              secondGameEnded = true;
-            }
          
        }else{
             image(pm2, 0, 0, width, height);
@@ -258,29 +249,11 @@ void draw(){
        }
        break;
        }
-       case 3:{
-         //score();
-         choice = 0;
-         break;
-       }
        case 4:{
          insruction();
         break; 
        }
        case 5:{
-         if(secondGameEnded == true){
-            image(pm2, 0, 0, width, height);
-            can.displaySecondCannon();
-            cas.displaySecondCastle();  
-            en.displaySecondEnvironment(); 
-         }
-         else{
-          image(pm, 0, 0, width, height);
-            can.display();
-            cas.display();  
-            en.display();
-         }
-         _life.resetLife(0);
            _life.showLife();
                gameOver = true;
                textSize(100);
@@ -291,9 +264,13 @@ void draw(){
           
           countToWaitForMenu++;
           
-          if(countToWaitForMenu % 100 == 0)
+          if(countToWaitForMenu % 300 == 0)
           { 
             choice = 6;
+             for(int i = 0; i < enemySize; i++)
+             {
+                enemytroop[i].setToDead();
+             }
             // goBackToMenu = true;
           }
          
@@ -348,7 +325,7 @@ public void checkAttacks(){
   //    CannonBall can2 = p1.getCannonBallInArrayListAtIndex(j);
   //    println(ax+" "+ay);
       int NumberOfCannonBallOnScreen = p1.getSizeOfCannonBallArrayList()+1;
-   println(NumberOfCannonBallOnScreen);
+   //println(NumberOfCannonBallOnScreen);
    boolean reachedCastle;
    if(NumberOfCannonBallOnScreen == 0){
     for(int i = 0;i<enemySize;i++){
@@ -374,7 +351,6 @@ public void checkAttacks(){
         reachedCastle = enemytroop[i].showEnery();
         if(reachedCastle == true){
           if(frameCount % 20 == 0){
-             System.out.println("In hereeeee");
              _life.getDameged(2);
              swordsClashingSound.play();
              if(_life.getLife() <= 0){
@@ -406,20 +382,46 @@ void displayAllianceTroop(){
 void insruction(){
   background(0);
   
-  String howToPlay1 ="Control your cannon angle by moving the cursor on the screen. The direction of the cannon will point to it.";
-  String howToPlay2 ="Fire a cannon ball by right-clicking on the mouse.";
-  String howToPlay3 ="Collect items displayed as colorful orbs by hovering over them with the cursor.";
-  String howToPlay4 ="The key ‘L’ is used to activate a lightning strike.";
-  String howToPlay5 ="The key ‘H’ is used to summon allied troops.";
+  String howToPlayTitle = "---How To Play---";
+  String howToPlay ="Hover your mouse over the enemies that you want to eliminate and";
+  String howToPlayCont = "press the left mouse button to shoot from the cannon";
+  String objective = "The objective is to keep enemies from destroying your castle";
+  String abilities = "----Abilities----";
+  String powers = "**There are three abilities that can each be obtained by";
+  String powersCont1 = " hovering your mouse and clicking over their";
+  String powersCont2 = "respective icons as they are falling down the screen";
+  String lightning = "***A yellow circular object in the screen represents the";
+  String lightningCont1 = "lightning power. Once you obtain it, press the 'L' key in your keyboard to use it.";
+  String lightningCont2 = "Obtain it in order to unleash a devastating attack upon your enemies";
+  String allies = "***A purple circular object in the screen represents an allied troop ability.";
+  String alliesCont1 = "Once obtained, use it by pressing the 'H' key in your keyboard and an ally";
+  String alliesCont2 = " will come to your aid.";
+  String life = "***A green circular object in the screen represents the life ability. Once";
+  String lifeCont1 = "obtained, it will instantly regenerate life for your castle without";
+  String lifeCont2 = "needing to press any keys";
   String quit = "Hit 'q' to quit ";
   pushMatrix();
   translate(-150, 0);
-  textSize(20);
-  text(howToPlay1,width/2,height/2 - 40);
-  text(howToPlay2,width/2,height/2);
-  text(howToPlay3,width/2,height/2 + 40);
-  text(howToPlay4,width/2,height/2 + 80);
-  text(howToPlay5,width/2,height/2 + 120);
+  textSize(40);
+  text(howToPlayTitle,width/2,height/4 - 110);
+  textSize(33);
+  text(abilities, width/2, height/2 - 135);
+  textSize(27);
+  text(howToPlay,width/2,height/4 - 75);
+  text(howToPlayCont,width/2,height/4 - 50);
+  text(objective,width/2,height/4 + 50 - 75);
+  text(powers, width/2, height/2 - 100);
+  text(powersCont1, width/2, height/2+ 25 - 100);
+  text(powersCont2, width/2, height/2+ 50 - 100);
+  text(lightning, width/2, height/2 + 75 - 80);
+  text(lightningCont1, width/2 + 100, height/2 + 100 - 80);
+  text(lightningCont2, width/2 + 75, height/2 + 125-80);
+  text(allies, width/2  + 75, height/2 + 150 - 75);
+  text(alliesCont1, width/2 + 75, height/2 + 175 - 75);
+  text(alliesCont2, width/2, height/2 + 200 - 75);
+  text(life, width/2, height/2 + 225 - 70);
+  text(lifeCont1, width/2, height/2 + 250 - 70);
+  text(lifeCont2, width/2, height/2 + 275 - 70);
   
   text(quit,width/2,height/2 + 250);
   popMatrix();
@@ -493,9 +495,6 @@ void checkKey(){
       secondGame = true;
      choice = 2; 
   }
-   if(key == 'b'){
-     choice = 3; 
-  }
   if(key == 'c'){
     choice = 4;
   }
@@ -526,40 +525,43 @@ void getAllianceTroop(){
       int a ;
       if(firstGame){
         alliTroop.add(new allianceTroop());
-        a = getTargetForAllianceTroop(true);
+        alliTroop.get(alliTroop.size()-1).setIsTrackingRightEnemyTrue();
+        a = getTargetForAllianceTroop(false);
       }else{
       float rand = random(0,2);
+      println(rand);
       boolean right= true;
       if(rand > 1)
         right = false;
+      
       alliTroop.add(new allianceTroop());
-       alliTroop.get(alliTroop.size()-1).startInMiddle();
+      alliTroop.get(alliTroop.size()-1).startInMiddle();
+      alliTroop.get(alliTroop.size()-1).setIsTrackingRightEnemyFlase();
       a = getTargetForAllianceTroop(right);
       }
-      
       alliTroop.get(alliTroop.size()-1).init(a);
       item.decrementTroopCount();
   }
 }
 
 int getTargetForAllianceTroop(boolean right){
- 
-  if(right){
-  for(int i = 0;i<enemySize;i++){
-    if(enemytroopRightSide[i].getIsAlive() && isEnemyTakenByAllanceTroopAsTargetRight[i]){
+    
+ if(right){
+     for(int i = 0;i<enemySize;i++){
+        if(enemytroopRightSide[i].getIsAlive() && isEnemyTakenByAllanceTroopAsTargetRight[i]){
           isEnemyTakenByAllanceTroopAsTargetRight[i] = false;
           return i;
         }
       }
-}
+ }
  else{
      for(int i = 0;i<enemySize;i++){
-    if(enemytroop[i].getIsAlive() && isEnemyTakenByAllanceTroopAsTarget[i]){
-      isEnemyTakenByAllanceTroopAsTarget[i] = false;
-      return i;
+        if(enemytroop[i].getIsAlive() && isEnemyTakenByAllanceTroopAsTarget[i]){
+          isEnemyTakenByAllanceTroopAsTarget[i] = false;
+          return i;
+        }
     }
-     }
-  }
+ }
   
   ///you get there if all the enemyTroop are currently taken targeted by alliance troop
   for(int i = 0;i<enemySize;i++){
