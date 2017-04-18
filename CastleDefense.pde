@@ -236,23 +236,36 @@ public void checkAttacks(){
   
 //  println("number of ball on screen "+(p1.getSizeOfCannonBallArrayList()+1));
   boolean wasEnemyHit;
-  for(int j = 0;j<p1.getSizeOfCannonBallArrayList()+1;j++){
-      float ax = p1.getXCoordOfCannonBallInArrayListAtIndex(j);
-      float ay = p1.getYCoordOfCannonBallInArrayListAtIndex(j);
-      CannonBall can2 = p1.getCannonBallInArrayListAtIndex(j);
-      println(ax+" "+ay);
+  //for(int j = 0;j<p1.getSizeOfCannonBallArrayList()+1;j++){
+  //    float ax = p1.getXCoordOfCannonBallInArrayListAtIndex(j);
+  //    float ay = p1.getYCoordOfCannonBallInArrayListAtIndex(j);
+  //    CannonBall can2 = p1.getCannonBallInArrayListAtIndex(j);
+  //    println(ax+" "+ay);
+      int NumberOfCannonBallOnScreen = p1.getSizeOfCannonBallArrayList()+1;
+   println(NumberOfCannonBallOnScreen);
+   boolean reachedCastle;
+   if(NumberOfCannonBallOnScreen == 0){
     for(int i = 0;i<enemySize;i++){
-          enemytroop[i].checkAttackers((int)ax,(int)ay);
-          //enemytroop[i].checkEnemyHitByCannon((int)ax,(int)ay);
-          wasEnemyHit = enemytroop[i].checkEnemyHitByCannon((int)ax,(int)ay);
-          enemytroop[i].ExecuteCannonBlast(wasEnemyHit, can2);
-     }
+         enemytroop[i].setMoveForward();  
+   }
   } 
-  boolean reachedCastle;
+   else{
+       for(int k = 0;k<NumberOfCannonBallOnScreen;k++){
+           float ax2 = p1.getXCoordOfCannonBallInArrayListAtIndex(k);
+           float ay2 = p1.getYCoordOfCannonBallInArrayListAtIndex(k);
+           CannonBall can3 = p1.getCannonBallInArrayListAtIndex(k);
+         for(int i = 0;i<enemySize;i++){
+           
+               enemytroop[i].checkAttackers((int)ax2,(int)ay2);
+               //enemytroop[i].checkEnemyHitByCannon((int)ax,(int)ay);
+               wasEnemyHit = enemytroop[i].checkEnemyHitByCannon((int)ax2,(int)ay2);
+               enemytroop[i].ExecuteCannonBlast(wasEnemyHit, can3);
+         }
+      } 
+  }
   for(int i = 0;i<enemySize;i++){
      if(enemytroop[i].getIsAlive()){
         reachedCastle = enemytroop[i].showEnery();
-        enemytroop[i].damageCastle(reachedCastle);
         if(reachedCastle == true){
           if(frameCount % 20 == 0){
              System.out.println("In hereeeee");
@@ -272,16 +285,20 @@ public void checkAttacks(){
      }
        enemytroop[i].enemyMoveUP();
   }
+     }
   
 }
 }
-}
+
 
              
 void displayAllianceTroop(){
   
   for(int i = 0;i<alliTroop.size();i++){
       alliTroop.get(i).showAllianceTroop();
+      if(alliTroop.get(i).getLife() == 0){
+         alliTroop.remove(i);
+       }
   }
   
 }//displayAllianceTroop
@@ -399,9 +416,11 @@ void use_item(){
 }
 
 void displayYouWin(){
-  
+  textSize(100);
+  textAlign(CENTER,CENTER);
+  fill(0,0,255);
   String youWin = "You Win!";
-  text(youWin,width/2,height/2 + 250);
+  text(youWin,width/2,height/2);
 }
 
 void mousePressed(){
