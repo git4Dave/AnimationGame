@@ -13,7 +13,11 @@ class allianceTroop extends enemy_design{
     this.targetValue = target;
     println("target value = "+target);
   }
-   
+  
+  void startInMiddle(){
+     this.x = 650; 
+  }
+  
   void showAllianceTroop(){
     
     //allianceInMove(x,y);
@@ -58,8 +62,19 @@ class allianceTroop extends enemy_design{
   }
   
   int getNewTrget(){
-     int newTarget = getTargetForAllianceTroop();
-     return newTarget;
+    
+      int newvalue;
+      if(firstGame){
+          newvalue =getTargetForAllianceTroop(true);
+      }
+      else{
+          float rand = random(0,2);
+          boolean right= true;
+          if(rand > 1)
+            right = false;
+          newvalue = getTargetForAllianceTroop(right);
+      }
+     return newvalue;
   }
   
   
