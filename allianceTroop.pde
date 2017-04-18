@@ -8,12 +8,19 @@ class allianceTroop extends enemy_design{
   private int x = 1200;
   private int y = 450;
   private int targetValue;//target value. this is the array number of target enemy
+  private boolean isTrackingRightEnemy = true;
   
   void init(int target){
     this.targetValue = target;
     println("target value = "+target);
   }
   
+  void setIsTrackingRightEnemyTrue(){
+     isTrackingRightEnemy = true; 
+  }
+  void setIsTrackingRightEnemyFlase(){
+     isTrackingRightEnemy = false; 
+  }
   void startInMiddle(){
      this.x = 650; 
   }
@@ -24,15 +31,32 @@ class allianceTroop extends enemy_design{
     drawAllies();
     
     ///if the target enemy is dead then, re-assigned to new target
-    if(!enemytroop[targetValue].getIsAlive()){
+    if(enemytroop[targetValue].getIsAlive()){
       println(targetValue+" is dead");
       targetValue = getNewTrget();
       println("new value "+targetValue+" is assigned");
     }
     
-    allianceTroopAttacksEnemy();
+    if(isTrackingRightEnemy)
+      allianceTroopAttacksEnemy();
+    else
+      allianceTroopAttacksEnemyRight();
     giveDamageToenemy();
   }
+  
+  void allianceTroopAttacksEnemyRight(){
+    
+    if(enemytroopRightSide[targetValue].getX() - this.x >0)
+       this.x = this.x+2;
+     else
+       this.x = this.x - 2;
+       
+    if(enemytroopRightSide[targetValue].getY() - this.y >0)
+       this.y = this.y+2;
+     else
+       this.y = this.y-2;
+    
+  }//allianceTroopAttacksEnemy
   
   void allianceTroopAttacksEnemy(){
     
