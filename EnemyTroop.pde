@@ -14,7 +14,10 @@ class EnemyTroop extends enemy_design{
   private float movingDownSpeed;
   private int enemyLife = 3;
   private boolean enemryGetsHitAt = false;
+  private boolean enemyEscapeFromCannonBallVertically = true;
+ 
   
+
   EnemyTroop(){
     this.isAlive = true;
   };
@@ -51,11 +54,11 @@ class EnemyTroop extends enemy_design{
   void setMovebackward(){
       this.Moveforward = false;
   }
-  
+  /*
   void enemyMoveUP(){
     if(!enemyMoveGoUp){
       if(y<ground){
-         y= y+(int)movingDownSpeed;; 
+         y= y+(int)movingDownSpeed;
       }
       else{
         float randNumberForGoUp = random(0,15);
@@ -70,6 +73,27 @@ class EnemyTroop extends enemy_design{
           setEnemyMoveUPToFalse();
     }
   }//end of enemyMoveUP
+  */
+  void enemyMoveUP(){
+    
+    if(!enemyMoveGoUp){
+      if(y<ground){
+         y= y+(int)movingDownSpeed;
+      }
+      else{
+        float randNumberForGoUp = random(0,15);
+        if(randNumberForGoUp<0.25)
+          setEnemyMoveUPToTrue();
+      }
+    }
+    else{
+        if(y>=ceiling)
+            y= y-(int)movingDownSpeed;
+        else
+          setEnemyMoveUPToFalse();
+    }
+    
+  }
   
   void setEnemyMoveUPToFalse(){
     enemyMoveGoUp = false;
@@ -82,17 +106,32 @@ class EnemyTroop extends enemy_design{
   void checkAttackers(int ex,int ey){
     
     //if the attacker is close enough, move back from it.
+    
+    
+    //move horizontally 
     if(abs(this.y - ey) < 50 && abs(ex - this.x)<150){
           setMovebackward();
       }
-    //println((ex - this.x));
- //   println(this.x);
+
     if( (ex - this.x)<0 || (ey - this.y)>50 || this.x< 50 || this.enemryGetsHitAt){
           this.enemryGetsHitAt = false;
           setMoveForward();
-    }
+      }
+       
+   ///move vertically
+     println(this.y+" "+ey);
+    if(abs(this.y - ey) < 150 && abs(ex - this.x)<200 && ey > this.y){
+        setEnemyMoveUPToTrue();
+     }
+     
+    if(abs(this.y - ey) < 150 && abs(ex - this.x)<200 && this.y >= ey){
+        setEnemyMoveUPToFalse();
+      }
+     
+      //checkEnemyVertivally(ex,ey);
+    
   }
-  
+
   
   public boolean checkEnemyHitByCannon(float cannonX, float cannonY){
    
