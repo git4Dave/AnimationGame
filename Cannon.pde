@@ -14,6 +14,8 @@ class Cannon{
    YCoordForCannon2 = height/2 - 25; 
 }
 
+//Displays cannon for easy level
+
   public void display(){ 
    
     stroke(0); 
@@ -34,6 +36,8 @@ class Cannon{
     ellipse(xCoordForCannon, YCoordForCannon, 10, 10); 
           
   }
+
+//Creates the cannon for the intermediate level and displays it
 
   public void displaySecondCannon(){ 
    
@@ -56,11 +60,14 @@ class Cannon{
           
   }
   
+  //Creates the angle for the cannon barrel based on the mouse position for the easy level and displays it
   
  float moveCannonAngle(){ 
   this.angle=-atan2(mouseY-YCoordForCannon,mouseX-xCoordForCannon);
   return angle;
 }
+
+//Creates the angle for the cannon barrel based on the mouse position for intermediate level and displays it
 
  float moveCannonAngle2(){ 
   this.angle2=-atan2(mouseY-YCoordForCannon2,mouseX-xCoordForCannon2);

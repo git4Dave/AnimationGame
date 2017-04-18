@@ -6,6 +6,7 @@ class Castle{
     castleHealth = 500;  
   }
   
+  //Displays castle for easy level
   public void display(){
     rectMode(CENTER);
     noStroke();
@@ -53,6 +54,7 @@ class Castle{
     popMatrix();
   }
   
+  //Displays castle for harder level
   public void displaySecondCastle(){
      rectMode(CENTER);
     noStroke();

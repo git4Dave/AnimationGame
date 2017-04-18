@@ -12,7 +12,9 @@ class User {
   User() {
     cannonballs  = new ArrayList(); 
   }
-
+  
+  //Fires the cannon ball by first checking if some time has passed since it last fired. Also calculates hte speed of the cannon ball and adds a cannon ball object to an array list with
+  // its necessary fields
   void shootCannon() { 
   float horizontalSpeed;
     float verticalSpeed; 
@@ -33,27 +35,33 @@ class User {
     }
   } 
 
+///Gets the angle of the cannon for easy level
   float getCannonAngle() {
     float angleOfTheCannon=-atan2(mouseY - (height/2 - 25), mouseX- (width-370));
     return angleOfTheCannon;
   }
   
+  //returns size of array list, which is used in other class
   public int getSizeOfCannonBallArrayList(){
       return cannonballs.size() - 1;
   }
   
+  //Gets the x coordinate of the cannon ball from the index just chosen
   public float getXCoordOfCannonBallInArrayListAtIndex(int i){
      return cannonballs.get(i).getXcoordForCannonBall();
   }
   
+  //Gets the y coordinate of the cannon ball from the index just chosen
   public float getYCoordOfCannonBallInArrayListAtIndex(int i){
      return cannonballs.get(i).getYcoordForCannonBall();
   }
   
+  //Gets the cannon ball object from the index just chosen
   public CannonBall getCannonBallInArrayListAtIndex(int i){
      return cannonballs.get(i);
   }
 
+//Displays the cannon ball being shot and removes the ones that aren't being used anymore from the array list
   void display() {
 
     // draw cannonballs

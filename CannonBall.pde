@@ -8,6 +8,7 @@ class CannonBall {
    private float detonateCannonBall = 1;
    public boolean hitAnEnemy = false;
 
+//constructor initializes the ball location, speed, and width
   CannonBall(float xCoord, float yCoord, float speedForHorizontalDirection, float speedForVerticalDirection, float widthOfCannonBall) {
     xCoordForCannonBall = xCoord;
     yCoordForCannonBall = yCoord;
@@ -16,6 +17,7 @@ class CannonBall {
     verticalSpeed = speedForVerticalDirection; 
   }
 
+//updates the cannon ball movement and calls other functions to determine if the ball should explode
  public void cannonBallMovement() {
     xCoordForCannonBall = xCoordForCannonBall + horizontalSpeed; 
     yCoordForCannonBall = yCoordForCannonBall + verticalSpeed;
@@ -26,7 +28,7 @@ class CannonBall {
     }
   }
   
-  
+  //if cannon ball hits the ground then it will detonate
   public boolean endBall(){
     if(yCoordForCannonBall>height - 110){
      detonateCannonBall = -1; 
@@ -35,6 +37,7 @@ class CannonBall {
     return false;
   }
 
+//Checks whether cannonBall exits the map and detonates it
 public boolean shouldDestroy(){
   
   if(yCoordForCannonBall>height - 5){
@@ -57,6 +60,8 @@ public boolean shouldDestroy(){
     return false;
 }
 
+// Detonation will be red since enemy is not killed yet. Uses a for loop to create a random number of shards that will disperse on impact
+
   public void detonateCannonBallWhenEnemyIsNotKilled () {
     hitAnEnemy = true;
     System.out.println("Max Explosions is " );  
@@ -66,6 +71,8 @@ public boolean shouldDestroy(){
         explosions.add( new Detonation(random(xCoordForCannonBall-3, xCoordForCannonBall+3), random(yCoordForCannonBall+9, yCoordForCannonBall+12), random(-1.3, 1.3), random(-2.7, .6), 2, false)); 
       }
     }
+    
+    //Same as above, but detonation will be blue since enemy is killed
     public void detonateCannonBallWhenEnemyIsKilled(){
       hitAnEnemy = true;
       int maxExplosions= int(random(300, 500));
@@ -73,6 +80,8 @@ public boolean shouldDestroy(){
         explosions.add( new Detonation(random(xCoordForCannonBall-3, xCoordForCannonBall+3), random(yCoordForCannonBall+9, yCoordForCannonBall+12), random(-1.3, 1.3), random(-2.7, .6), 2, true));
       }
     } 
+
+//Used in other functions to have a cannon ball explode if it returns true
 
 public boolean detonateBall(){
   return detonateCannonBall == -1;
@@ -85,6 +94,8 @@ public float getXcoordForCannonBall(){
 public float getYcoordForCannonBall(){
   return yCoordForCannonBall;
 }
+
+//Displays each cannon ball shot even while moving
 
 public void display() {
     fill(0);

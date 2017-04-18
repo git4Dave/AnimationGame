@@ -4,6 +4,7 @@ class Environment{
 
  }
  
+ //Displays environment for beginner level
  public void display(){
     fill(#0C5F07);
     rect(265, height - 50, 630, 100);
@@ -28,31 +29,13 @@ class Environment{
    
  }
  
- 
+ //Displays environment for intermediate level
  public void displaySecondEnvironment(){
     fill(#362304);
     rect(width/2, height - 50, width, 100);
-    
-    //pushMatrix();
-    
-    //translate(330, 0);
-    
-     //fill(100);
-    //triangle(600, height - 45, 615, height - 57, 615, height - 45);
-    //fill(100);
-    //triangle(400, height - 45, 385, height - 57, 385, height - 45);
-    //fill(0, 0, 255);
-    //rect(500, height - 25, 500, 50);
-    
-    //fill(#62450C);
-    //rect(500, height - 92, 500, 15);
-    
-    //fill(#0C5F07);
-    //rect(850, height - 50, 400, 100); 
-    //popMatrix();
    
  }
-  
+    //Creates lightning strike
      void Lightning(int start, int end, int x, int start2, int end2, int x2, int start3, int end3, int x3) {
 
     ///x range 
@@ -85,6 +68,7 @@ class Environment{
     Lightning(start+5, end, x+(int)dx, start2+5, end2, x2+(int)dx2, start3+5, end3, x3+(int)dx3);
   }
   
+  //Kills enemy if they are within a specified distance of a lightning strike
   
    void killEnemyLightning(int x,int x2,int x3){
      
