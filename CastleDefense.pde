@@ -283,9 +283,9 @@ public void checkAttacks(){
                 break;
            }  
      }
-       enemytroop[i].enemyMoveUP();
   }
      }
+     enemytroop[i].enemyMoveUP();
   
 }
 }
@@ -408,11 +408,20 @@ void use_item(){
      key = ';';
   }
   else if(key == 'q'){
+     resetEnemyPosition();
     choice = 0;
   }
   else{
     key = ';';///set the key to diffrent key
   }
+}
+
+void resetEnemyPosition(){
+ for(int i = 0; i < enemySize; i++){
+    enemytroop[i].setToAlive();
+    enemytroop[i].setUpInitialPositionForEnemy();
+   
+ }
 }
 
 void displayYouWin(){
