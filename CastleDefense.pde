@@ -1,5 +1,3 @@
-
-
 import processing.sound.*;
 SoundFile warDrumsSound, cannonShotSound, swordsClashingSound, explosionSound;
 
@@ -11,16 +9,18 @@ boolean showMenu;
 int choice;
 boolean menuAccess;
 int heights = 1000;
-final int enemySize = 30;
+final int enemySize = 20;
 final int DISPLAY_DURATION = 200;
 boolean[] isEnemyTakenByAllanceTroopAsTarget = new boolean[enemySize];
 private int allianceCount = 0;
+private int lifeCount = 450;
 
 
-life _life = new life(150);///life of the castle
+life _life = new life(lifeCount);///life of the castle
 Item item = new Item();
 User p1 = new User();
 EnemyTroop enemytroop[] = new EnemyTroop[enemySize];
+EnemyTroop enemytroopRightSide[] = new EnemyTroop[enemySize];
 
 Cannon can;
 Castle cas;
@@ -37,11 +37,13 @@ void setup(){
   size(1500, 600);
   pm = loadImage("sky.jpg");
   pm2 = loadImage("NightSky.jpg");
+  /*
   warDrumsSound = new SoundFile(this, "WarDrums.wav");
   cannonShotSound = new SoundFile(this, "CannonShot.wav");
   swordsClashingSound = new SoundFile(this, "SwordsClashing.wav");
   explosionSound = new SoundFile(this, "Explosion.wav");
-  warDrumsSound.loop();
+ // warDrumsSound.loop();
+ */
   title = "Defend The Castle";
   subTitle = "Press Enter to Start";
   welcome = "Welcome";
@@ -61,9 +63,16 @@ void setup(){
   menuAccess = true;
    for(int i = 0;i<enemySize;i++){
       enemytroop[i] = new EnemyTroop();
-      enemytroop[i].setUpInitialPositionForEnemy();
+      enemytroop[i].setUpInitialPositionForEnemy(true);
       enemytroop[i].setJumpValueForEnemy();
-  }
+    }
+    
+   for(int i = 0;i<enemySize;i++){
+      enemytroopRightSide[i] = new EnemyTroop();
+      enemytroopRightSide[i].setUpInitialPositionForEnemy(false);
+      enemytroopRightSide[i].setJumpValueForEnemy();
+    }
+    
   cursor(CROSS);
   explosions = new ArrayList<Detonation>();
 }
@@ -79,7 +88,7 @@ void initiateDetonation() {
     detonationOccurred = true;
   }
   if(detonationOccurred == true){
-    explosionSound.play();
+   // explosionSound.play();
   }
   
   for (int i = explosions.size()-1; i>=0; i--) {
@@ -172,18 +181,19 @@ void draw(){
             image(pm, 0, 0, width, height);
             cas = new Castle();
             can = new Cannon();
-            en = new Environment(); 
+            en = new Environment();
             smooth();
             can.moveCannonAngle();
             p1.display();
             can.display();
             cas.display();
-            en.display(); 
+            en.display();
             displayYouWin();
        }
        break;
      }
        case 2:{
+         //intermidiate
          if(isAllEnemyDead()){
             image(pm2, 0, 0, width, height);
             cas = new Castle();
@@ -200,6 +210,7 @@ void draw(){
             en.displaySecondEnvironment();
             displayAllianceTroop();
             checkAttacks();
+            checkAttacksForRightEnemy();
          
        }else{
             image(pm2, 0, 0, width, height);
@@ -231,6 +242,61 @@ void draw(){
   
 }//end of draw
 
+public void checkAttacksForRightEnemy(){
+  
+       boolean wasEnemyHit;
+
+       int NumberOfCannonBallOnScreen = p1.getSizeOfCannonBallArrayList()+1;
+       println(NumberOfCannonBallOnScreen);
+       boolean reachedCastle;
+  /*     
+       for(int i =0;i<NumberOfCannonBallOnScreen;i++){
+         if()
+       }
+  */  
+  
+       if(NumberOfCannonBallOnScreen == 0 ){
+        for(int i = 0;i<enemySize;i++){
+            enemytroopRightSide[i].setMoveForward();  
+       }
+      } 
+       else{
+           for(int k = 0;k<NumberOfCannonBallOnScreen;k++){
+               float ax2 = p1.getXCoordOfCannonBallInArrayListAtIndex(k);
+               float ay2 = p1.getYCoordOfCannonBallInArrayListAtIndex(k);
+               CannonBall can3 = p1.getCannonBallInArrayListAtIndex(k);
+             for(int i = 0;i<enemySize;i++){
+                   enemytroopRightSide[i].checkAttackersForRightEnemy((int)ax2,(int)ay2);
+                   //enemytroop[i].checkEnemyHitByCannon((int)ax,(int)ay);
+                   wasEnemyHit = enemytroopRightSide[i].checkEnemyHitByCannon((int)ax2,(int)ay2);
+                   enemytroopRightSide[i].ExecuteCannonBlast(wasEnemyHit, can3);
+             }
+          }
+      }
+      for(int i = 0;i<enemySize;i++){
+         if(enemytroopRightSide[i].getIsAlive()){
+            reachedCastle = enemytroopRightSide[i].showEnemyRightSide();
+            if(reachedCastle == true){
+              if(frameCount % 20 == 0){
+                 _life.getDameged(3);
+               //  swordsClashingSound.play();
+                 if(_life.getLife() <= 0){
+                   _life.showLife();
+                   gameOver = true;
+                   textSize(100);
+                    textAlign(CENTER,CENTER);
+                    fill(255,0,0);
+                    text("GAME OVER", width/2, height/2);
+                    noLoop();
+                    break;
+               }
+         }
+      }
+         }
+         enemytroopRightSide[i].enemyMoveUP();
+    }  
+  
+}
 
 public void checkAttacks(){
   
@@ -241,13 +307,14 @@ public void checkAttacks(){
   //    float ay = p1.getYCoordOfCannonBallInArrayListAtIndex(j);
   //    CannonBall can2 = p1.getCannonBallInArrayListAtIndex(j);
   //    println(ax+" "+ay);
-      int NumberOfCannonBallOnScreen = p1.getSizeOfCannonBallArrayList()+1;
+   int NumberOfCannonBallOnScreen = p1.getSizeOfCannonBallArrayList()+1;
    println(NumberOfCannonBallOnScreen);
    boolean reachedCastle;
    if(NumberOfCannonBallOnScreen == 0){
     for(int i = 0;i<enemySize;i++){
          enemytroop[i].setMoveForward();  
-   }
+     }
+     
   } 
    else{
        for(int k = 0;k<NumberOfCannonBallOnScreen;k++){
@@ -269,8 +336,8 @@ public void checkAttacks(){
         if(reachedCastle == true){
           if(frameCount % 20 == 0){
              System.out.println("In hereeeee");
-             _life.getDameged(10);
-             swordsClashingSound.play();
+             _life.getDameged(3);
+           //  swordsClashingSound.play();
              if(_life.getLife() <= 0){
                _life.showLife();
                gameOver = true;
@@ -419,8 +486,8 @@ void use_item(){
 void resetEnemyPosition(){
  for(int i = 0; i < enemySize; i++){
     enemytroop[i].setToAlive();
-    enemytroop[i].setUpInitialPositionForEnemy();
-   
+    enemytroop[i].setUpInitialPositionForEnemy(true);
+    _life.resetLife();
  }
 }
 
@@ -435,10 +502,10 @@ void displayYouWin(){
 void mousePressed(){
   if(secondGame == false && firstGame == true){
     p1.shootCannon();
-    cannonShotSound.play();
+  //  cannonShotSound.play();
   }
   else{
     p1.shootCannon2();
-    cannonShotSound.play();
+  //  cannonShotSound.play();
   }
 }
