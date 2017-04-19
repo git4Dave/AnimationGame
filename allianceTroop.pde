@@ -8,7 +8,7 @@ class allianceTroop extends enemy_design{
   private int x = 1200;
   private int y = 450;
   private int targetValue;//target value. this is the array number of target enemy
-  private boolean isTrackingRightEnemy = true;
+  private boolean isTrackingRightEnemy = false;//if true, it will keep track of right enemy
   
   void init(int target){
     this.targetValue = target;
@@ -38,10 +38,10 @@ class allianceTroop extends enemy_design{
       println("new value "+targetValue+" is assigned");
     }
     
-   // if(isTrackingRightEnemy)
+    if(isTrackingRightEnemy)
       allianceTroopAttacksEnemy();
-   // else
-   //   allianceTroopAttacksEnemyRight();
+    else
+      allianceTroopAttacksEnemyRight();
     giveDamageToenemy();
   }
   
@@ -87,10 +87,30 @@ class allianceTroop extends enemy_design{
   }
   
   int getNewTrget(){
-     int newTarget = getTargetForAllianceTroop();
+    int newTarget;
+    if(isTrackingRightEnemy){
+       newTarget = getTargetForAllianceTroop();
+    }
+    else{
+       if(!checkAllRightEnemyDead())
+          newTarget = getTargetForAllianceTroopForRightEnemy(true);
+       else{
+         setIsTrackingRightEnemyFlase();
+         newTarget = getTargetForAllianceTroop();
+       }
+    }
+      
      return newTarget;
   }
   
+  boolean checkAllRightEnemyDead(){
+     for(int i =0;i<enemySize;i++){
+       if(enemytroopRightSide[i].getIsAlive())
+         return false;
+     }
+     println("YES");
+     return true;
+  }
   
   int getLife(){
      return life; 
