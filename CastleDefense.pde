@@ -1,4 +1,3 @@
-
 import processing.sound.*;
 SoundFile warDrumsSound, cannonShotSound, swordsClashingSound, lightningSound;
 
@@ -41,11 +40,13 @@ void setup(){
   size(1500, 600);
   pm = loadImage("sky.jpg");
   pm2 = loadImage("NightSky.jpg");
+  /*
   warDrumsSound = new SoundFile(this, "WarDrums.wav");
   cannonShotSound = new SoundFile(this, "CannonShot.wav");
   swordsClashingSound = new SoundFile(this, "SwordsClashing.wav");
   lightningSound = new SoundFile(this, "Lightning.wav");
   warDrumsSound.loop();
+  */
   title = "Defend The Castle";
   subTitle = "Press Enter to Start";
   welcome = "Welcome";
@@ -61,7 +62,7 @@ void setup(){
   showMenuAgain = false;
   secondGameEnded = false;
   Arrays.fill(isEnemyTakenByAllanceTroopAsTarget,true);
-   Arrays.fill(isEnemyTakenByAllanceTroopAsTargetRight,true);
+  Arrays.fill(isEnemyTakenByAllanceTroopAsTargetRight,true);
   choice = 0;
   smooth();
   gameOver = false;
@@ -347,7 +348,7 @@ public void checkAttacks(){
   //    CannonBall can2 = p1.getCannonBallInArrayListAtIndex(j);
   //    println(ax+" "+ay);
       int NumberOfCannonBallOnScreen = p1.getSizeOfCannonBallArrayList()+1;
-   println(NumberOfCannonBallOnScreen);
+
    boolean reachedCastle;
    if(NumberOfCannonBallOnScreen == 0){
     for(int i = 0;i<enemySize;i++){
@@ -373,9 +374,9 @@ public void checkAttacks(){
         reachedCastle = enemytroop[i].showEnery();
         if(reachedCastle == true){
           if(frameCount % 20 == 0){
-             System.out.println("In hereeeee");
+
              _life.getDameged(2);
-             swordsClashingSound.play();
+       //      swordsClashingSound.play();
              if(_life.getLife() <= 0){
               choice = 5;
               countToWaitForMenu = 0;
@@ -461,7 +462,7 @@ public void checkAttacksForRightEnemy(){
        boolean wasEnemyHit;
 
        int NumberOfCannonBallOnScreen = p1.getSizeOfCannonBallArrayList()+1;
-       println(NumberOfCannonBallOnScreen);
+      // println(NumberOfCannonBallOnScreen);
        boolean reachedCastle;
   /*     
        for(int i =0;i<NumberOfCannonBallOnScreen;i++){
@@ -493,7 +494,7 @@ public void checkAttacksForRightEnemy(){
             if(reachedCastle == true){
               if(frameCount % 20 == 0){
                  _life.getDameged(2);
-                 swordsClashingSound.play();
+              //   swordsClashingSound.play();
                  if(_life.getLife() <= 0){
                    countToWaitForMenu = 0;
                     choice = 5;
@@ -545,45 +546,23 @@ boolean isAllEnemyDead(){
 
 void getAllianceTroop(){
   while(item.getTroopCount()>0){
-      println("allianceTroop created!");
-      int a ;
-      if(firstGame){
-        alliTroop.add(new allianceTroop());
-        alliTroop.get(alliTroop.size()-1).setIsTrackingRightEnemyTrue();
-        a = getTargetForAllianceTroop(true);
-      }else{
-      float rand = random(0,2);
-      boolean right= true;
-      if(rand > 1)
-        right = false;
+     
       alliTroop.add(new allianceTroop());
-       alliTroop.get(alliTroop.size()-1).startInMiddle();
-      alliTroop.get(alliTroop.size()-1).setIsTrackingRightEnemyFlase();
-      a = getTargetForAllianceTroop(right);
-      }
-      
+      int a = getTargetForAllianceTroop();
       alliTroop.get(alliTroop.size()-1).init(a);
+      if(!firstGame)
+        alliTroop.get(alliTroop.size()-1).EnemyStartingXValueForStage2();
       item.decrementTroopCount();
   }
 }
 
-int getTargetForAllianceTroop(boolean right){
+int getTargetForAllianceTroop(){
  
-  if(right){
   for(int i = 0;i<enemySize;i++){
-    if(enemytroopRightSide[i].getIsAlive() && isEnemyTakenByAllanceTroopAsTargetRight[i]){
-          isEnemyTakenByAllanceTroopAsTargetRight[i] = false;
-          return i;
-        }
-      }
-}
- else{
-     for(int i = 0;i<enemySize;i++){
     if(enemytroop[i].getIsAlive() && isEnemyTakenByAllanceTroopAsTarget[i]){
       isEnemyTakenByAllanceTroopAsTarget[i] = false;
       return i;
     }
-     }
   }
   
   ///you get there if all the enemyTroop are currently taken targeted by alliance troop
@@ -608,7 +587,7 @@ void use_item(){
          en.Lightning(0,1000,400,0,1000,400,0,1000,400);
          en.Lightning(0,1000,700,0,1000,700,0,1000,700);
          en.Lightning(0,1000,1000,0,1000,1000,0,1000,1000);
-          lightningSound.play(); 
+   //       lightningSound.play(); 
     //   }
         item.decrementLightningCount();
         
@@ -652,10 +631,10 @@ void displayYouWin(){
 void mousePressed(){
   if(secondGame == false && firstGame == true){
     p1.shootCannon();
-    cannonShotSound.play();
+//    cannonShotSound.play();
   }
   else{
     p1.shootCannon2();
-    cannonShotSound.play();
+ //   cannonShotSound.play();
   }
 }
