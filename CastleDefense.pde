@@ -15,7 +15,7 @@ private boolean[] isEnemyTakenByAllanceTroopAsTarget = new boolean[enemySize];
 private boolean[] isEnemyTakenByAllanceTroopAsTargetRight = new boolean[enemySize];
 private int allianceCount = 0;
 private int countToWaitForMenu;
-private int lifeCount = 600;
+private int lifeCount = 60000;
 
 
 life _life = new life(lifeCount);///life of the castle
@@ -95,7 +95,7 @@ void initiateDetonation() {
   //  explosionSound.play();
   //}
   
-  for (int i = explosions.size()-1; i>=0; i--) {
+  for (int i = explosions.size()-1; i>=0; i--){
     Detonation d = (Detonation) explosions.get(i);
     if (d.removeExplosion) {
       explosions.remove(i);
@@ -312,16 +312,16 @@ void draw(){
       gameOver = false;
       menuAccess = true;
        for(int i = 0;i<enemySize;i++){
-         choice = 0;
+          choice = 0;
           enemytroop[i] = new EnemyTroop();
           enemytroop[i].setUpInitialPositionForEnemy(true);
           enemytroop[i].setJumpValueForEnemy();
       }
       for(int i = 0;i<enemySize;i++){
-      enemytroopRightSide[i] = new EnemyTroop();
-      enemytroopRightSide[i].setUpInitialPositionForEnemy(false);
-      enemytroopRightSide[i].setJumpValueForEnemy();
-  }
+          enemytroopRightSide[i] = new EnemyTroop();
+          enemytroopRightSide[i].setUpInitialPositionForEnemy(false);
+          enemytroopRightSide[i].setJumpValueForEnemy();
+      }
          showMenuAgain = true;
          break;
        }
@@ -361,13 +361,12 @@ public void checkAttacks(){
            float ay2 = p1.getYCoordOfCannonBallInArrayListAtIndex(k);
            CannonBall can3 = p1.getCannonBallInArrayListAtIndex(k);
          for(int i = 0;i<enemySize;i++){
-           
                enemytroop[i].checkAttackers((int)ax2,(int)ay2);
                //enemytroop[i].checkEnemyHitByCannon((int)ax,(int)ay);
                wasEnemyHit = enemytroop[i].checkEnemyHitByCannon((int)ax2,(int)ay2);
                enemytroop[i].ExecuteCannonBlast(wasEnemyHit, can3);
          }
-      } 
+      }
   }
   for(int i = 0;i<enemySize;i++){
      if(enemytroop[i].getIsAlive()){
@@ -381,7 +380,7 @@ public void checkAttacks(){
               choice = 5;
               countToWaitForMenu = 0;
                 break;
-           }  
+           }
      }
   }
      }
@@ -548,15 +547,77 @@ void getAllianceTroop(){
   while(item.getTroopCount()>0){
      
       alliTroop.add(new allianceTroop());
-      int a = getTargetForAllianceTroop();
-      alliTroop.get(alliTroop.size()-1).init(a);
-      if(!firstGame)
-        alliTroop.get(alliTroop.size()-1).EnemyStartingXValueForStage2();
+      ///for stage 1 
+      if(firstGame){
+           int a = getTargetForAllianceTroop();
+           alliTroop.get(alliTroop.size()-1).init(a);
+           alliTroop.get(alliTroop.size()-1).setIsTrackingRightEnemyTrue();
+      }
+      else{
+      //for stage 2
+           
+           boolean isRight = true;
+           float rand = random(0,2);
+           if(rand>1)
+             isRight = false;
+           int a = getTargetForAllianceTroopForRightEnemy(isRight);
+           alliTroop.get(alliTroop.size()-1).init(a);
+           
+           if(isRight)
+             alliTroop.get(alliTroop.size()-1).setIsTrackingRightEnemyTrue();
+           alliTroop.get(alliTroop.size()-1).EnemyStartingXValueForStage2();
+      }
+      
+    
       item.decrementTroopCount();
+      
   }
+}
+int getTargetForAllianceTroopForRightEnemy(boolean isRight){
+ 
+  
+  if(isRight){
+      for(int i = 0;i<enemySize;i++){
+        if(enemytroopRightSide[i].getIsAlive() && isEnemyTakenByAllanceTroopAsTargetRight[i]){
+          isEnemyTakenByAllanceTroopAsTarget[i] = false;
+          return i;
+        }
+      }
+  }
+  else{
+      for(int i = 0;i<enemySize;i++){
+        if(enemytroop[i].getIsAlive() && isEnemyTakenByAllanceTroopAsTarget[i]){
+          isEnemyTakenByAllanceTroopAsTarget[i] = false;
+          return i;
+        }
+      }
+  }
+  ///you get there if all the enemyTroop are currently taken targeted by alliance troop
+  for(int i = 0;i<enemySize;i++){
+    if(enemytroop[i].getIsAlive()){
+      return i;
+    }
+  }
+
+  ///it will never get here
+  return 0;
 }
 
 int getTargetForAllianceTroop(){
+ println("asfasdf found ");
+ for(int i = 0;i<enemySize;i++){
+   if(enemytroop[i].getIsAlive())
+     println(i+" ALive");
+    else
+    println(i+" dead");
+ }
+ println(" ");
+  for(int i = 0;i<enemySize;i++){
+   if(isEnemyTakenByAllanceTroopAsTarget[i])
+     println(i+" ALive");
+    else
+    println(i+" dead");
+ }
  
   for(int i = 0;i<enemySize;i++){
     if(enemytroop[i].getIsAlive() && isEnemyTakenByAllanceTroopAsTarget[i]){
