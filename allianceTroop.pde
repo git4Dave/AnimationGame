@@ -21,8 +21,9 @@ class allianceTroop extends enemy_design{
   void setIsTrackingRightEnemyFlase(){
      isTrackingRightEnemy = false; 
   }
-  void startInMiddle(){
-     this.x = 650; 
+  
+  void EnemyStartingXValueForStage2(){
+      this.x = 650;
   }
   
   void showAllianceTroop(){
@@ -31,16 +32,16 @@ class allianceTroop extends enemy_design{
     drawAllies();
     
     ///if the target enemy is dead then, re-assigned to new target
-    if(enemytroop[targetValue].getIsAlive()){
+    if(!enemytroop[targetValue].getIsAlive()){
       println(targetValue+" is dead");
       targetValue = getNewTrget();
       println("new value "+targetValue+" is assigned");
     }
     
-    if(isTrackingRightEnemy)
+   // if(isTrackingRightEnemy)
       allianceTroopAttacksEnemy();
-    else
-      allianceTroopAttacksEnemyRight();
+   // else
+   //   allianceTroopAttacksEnemyRight();
     giveDamageToenemy();
   }
   
@@ -86,19 +87,8 @@ class allianceTroop extends enemy_design{
   }
   
   int getNewTrget(){
-    
-      int newvalue;
-      if(firstGame){
-          newvalue =getTargetForAllianceTroop(true);
-      }
-      else{
-          float rand = random(0,2);
-          boolean right= true;
-          if(rand > 1)
-            right = false;
-          newvalue = getTargetForAllianceTroop(right);
-      }
-     return newvalue;
+     int newTarget = getTargetForAllianceTroop();
+     return newTarget;
   }
   
   
