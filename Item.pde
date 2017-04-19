@@ -50,7 +50,7 @@ class Item{
   void decrementTroopCount(){
       Troop_count--;
   }
-    
+    //Shows the amount of lightning strikes avaliable to the player
   void showLighningCount(){
     fill(255,255,0);
     ellipse(width-310,30,starSize,starSize);
@@ -58,6 +58,7 @@ class Item{
     text("lightning:"+lightning_count,width-250,30);
   }
   
+  //Shows the allied troop count on screen
   void showTroopCount(){
     fill(255,0,255);
     ellipse(width-310,50,starSize,starSize);
@@ -109,25 +110,26 @@ class Item{
      else
       isTroopOnScreen = false;
   }
-  
+  //Displays the orb for lightning item
   void showLightning_ball(){
     fill(255,255,0);
     ellipse(starX_lightning,starY_lightning,starSize,starSize);
     fill(0,green,0);
   }
-  
+  //Displays the orb for life item
   void showLife_ball(){
     fill(0,255,0);
     ellipse(starX_life,starY_life,starSize,starSize);
     fill(0,green,0);
   }
-  
+  //Displays the orb for allied troop item
   void showTroop_ball(){
     fill(255,0,255);
     ellipse(starX_Troop,starY_Troop,starSize,starSize);
     fill(0,green,0);
   }
   
+  //Allows player to obtain ligtning strike
   void obtain_lightning(){
    
      ///if the star is obtained 
@@ -137,6 +139,7 @@ class Item{
     }
   }
   
+  //Allows player to obtain additional life to their castle
   void obtain_life(){
    
      ///if the star is obtained 
@@ -145,7 +148,7 @@ class Item{
       setIsLifeOnScreen(1); ///if star is obtained, then star will disappear
     }
   }
-  
+  //Allows player to obtain allied troop
   void obtain_Troop(){
    
      ///if the star is obtained 
